@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">WeatherApp</string>
+    <string name="temp">Temp</string>
+    <string name="time">Time</string>
+    <string name="enter">enter</string>
+    <string name="hello">hello</string>
+</resources>
