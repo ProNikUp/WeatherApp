@@ -12,6 +12,11 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }
+    allprojects {
+        repositories {
+            maven { url "https://jitpack.io" }
+        }
+    }
     buildTypes {
         release {
             minifyEnabled false
@@ -28,4 +33,5 @@ dependencies {
     compile 'com.android.support:support-v4:25.1.0'
     compile 'com.android.support:recyclerview-v7:25.1.0'
     compile 'com.android.support:design:25.1.0'
+    compile 'com.github.PhilJay:MPAndroidChart:v3.0.1'
 }

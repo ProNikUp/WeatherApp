@@ -10,7 +10,7 @@ import java.util.Date;
  * Created by eltgm on 19.01.17.
  */
 
-public class WeatherDay implements Parcelable{
+class WeatherDay implements Parcelable{
     int[] temp;
     double[] pressure;
     int[] humidity;

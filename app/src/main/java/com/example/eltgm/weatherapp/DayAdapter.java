@@ -11,7 +11,7 @@ import android.widget.TextView;
  * Created by eltgm on 29.01.17.
  */
 
-public class DayAdapter extends BaseAdapter {
+class DayAdapter extends BaseAdapter {
 
     private final WeatherDay weatherDay;
     private final Context mContext;
