@@ -55,13 +55,19 @@ public class Day extends AppCompatActivity {
         // , заполняем её данными из entries и создаем метку
         dataSet.setDrawFilled(true); // заполнение цветом
         dataSet.setFillColor(Color.BLUE); //синим
+        dataSet.setDrawValues(false); //не выводим значение в точке
+        dataSet.setDrawCircles(false); // не выводим точк
 
         LineData lineData = new LineData(dataSet); //создаем линию
         lineChart.setData(lineData); //добавляем линию к графику
         YAxis left = lineChart.getAxisLeft(); //создаем анимацию по оси Y
         lineChart.animateY(1500);  //1.5 сек
         lineChart.setTouchEnabled(false); //касани не распознаются графиком
-        lineChart.setDrawGridBackground(true);
+        lineChart.setDrawGridBackground(true); //заливка фона графика
+        lineChart.getAxisLeft().setDrawGridLines(false); //убираем горизонтальные линии
+        lineChart.getXAxis().setDrawGridLines(false); // убираем вертикальные линии
+        lineChart.getAxisRight().setDrawGridLines(false); //убираем горизонтальные линии
+        lineChart.getAxisLeft().setEnabled(false); //убираем легенду слева
 
         lineChart.invalidate(); //обновили график
     }
@@ -80,6 +86,8 @@ public class Day extends AppCompatActivity {
         // , заполняем её данными из entries и создаем метку
         dataSet.setDrawFilled(true); // заполнение цветом
         dataSet.setFillColor(Color.BLUE); //синим
+        dataSet.setDrawValues(false);
+        dataSet.setDrawCircles(false);
 
         LineData lineData = new LineData(dataSet); //создаем линию
         lineChart.setData(lineData); //добавляем линию к графику
@@ -87,6 +95,10 @@ public class Day extends AppCompatActivity {
         lineChart.animateY(1500);  //1.5 сек
         lineChart.setTouchEnabled(false); //касани не распознаются графиком
         lineChart.setDrawGridBackground(true);
+        lineChart.getAxisLeft().setDrawGridLines(false);
+        lineChart.getXAxis().setDrawGridLines(false);
+        lineChart.getAxisRight().setDrawGridLines(false);
+        lineChart.getAxisLeft().setEnabled(false);
 
         lineChart.invalidate(); //обновили график
     }
