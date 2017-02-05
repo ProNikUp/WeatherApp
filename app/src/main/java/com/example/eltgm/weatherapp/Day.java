@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
@@ -58,6 +59,9 @@ public class Day extends AppCompatActivity {
         dataSet.setDrawValues(false); //не выводим значение в точке
         dataSet.setDrawCircles(false); // не выводим точк
 
+        Description description = new Description();
+        description.setEnabled(false); //создаем описание и выключаем его(НУ И КОСТЫЛЬ ПИЗДЕЦ)
+
         LineData lineData = new LineData(dataSet); //создаем линию
         lineChart.setData(lineData); //добавляем линию к графику
         YAxis left = lineChart.getAxisLeft(); //создаем анимацию по оси Y
@@ -68,6 +72,7 @@ public class Day extends AppCompatActivity {
         lineChart.getXAxis().setDrawGridLines(false); // убираем вертикальные линии
         lineChart.getAxisRight().setDrawGridLines(false); //убираем горизонтальные линии
         lineChart.getAxisLeft().setEnabled(false); //убираем легенду слева
+        lineChart.setDescription(description); //присвоили выключенное описание  графику(нет слов...¯\_(ツ)_/¯)
 
         lineChart.invalidate(); //обновили график
     }
@@ -89,6 +94,9 @@ public class Day extends AppCompatActivity {
         dataSet.setDrawValues(false);
         dataSet.setDrawCircles(false);
 
+        Description description = new Description();
+        description.setEnabled(false); //создаем описание и выключаем его(НУ И КОСТЫЛЬ ПИЗДЕЦ)
+
         LineData lineData = new LineData(dataSet); //создаем линию
         lineChart.setData(lineData); //добавляем линию к графику
         YAxis left = lineChart.getAxisLeft(); //создаем анимацию по оси Y
@@ -99,6 +107,7 @@ public class Day extends AppCompatActivity {
         lineChart.getXAxis().setDrawGridLines(false);
         lineChart.getAxisRight().setDrawGridLines(false);
         lineChart.getAxisLeft().setEnabled(false);
+        lineChart.setDescription(description);
 
         lineChart.invalidate(); //обновили график
     }

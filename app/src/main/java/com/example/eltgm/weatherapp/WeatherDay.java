@@ -35,6 +35,7 @@ class WeatherDay implements Parcelable{
         day = weathers[0].getDay();
     }
 
+
     protected WeatherDay(Parcel in) {
         this.temp = in.createIntArray();
         this.pressure = in.createDoubleArray();
