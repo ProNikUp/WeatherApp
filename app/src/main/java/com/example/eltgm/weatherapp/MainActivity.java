@@ -1,6 +1,11 @@
 package com.example.eltgm.weatherapp;
 
 import android.annotation.SuppressLint;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -30,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
     private Weather[] tempBuff;
     private String osadki;
     private String wind;
+    NotificationManager notificationManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +69,8 @@ public class MainActivity extends AppCompatActivity {
         });
         final RequestQueue queue = Volley.newRequestQueue(this);
         queue.add(stringRequest);
+
+
     }
 
     public WeatherDay[] getWeather(String response){
@@ -152,6 +160,34 @@ public class MainActivity extends AppCompatActivity {
         tvDayTemp.setText(String.valueOf(tempBuff[0].getTemp()));
         tvOsadki.setText(osadki);
         tvWind.setText("wind speed: " + wind + "m/s");
+
+        Context context = getApplicationContext();
+
+        Intent notificationIntent = new Intent(context, MainActivity.class);
+        PendingIntent contentIntent = PendingIntent.getActivity(context,
+                0, notificationIntent,
+                PendingIntent.FLAG_CANCEL_CURRENT);
+
+        Notification.Builder builder = new Notification.Builder(context);
+
+        builder.setContentIntent(contentIntent)
+                .setSmallIcon(android.R.drawable.ic_media_next)
+                .setContentTitle(cityName.get("name").toString())
+                .setContentText(String.valueOf(tempBuff[0].getTemp())); // Текст уведомления
+
+        // Notification notification = builder.getNotification(); // до API 16
+        Notification notification = builder.build();
+
+        notificationManager = (NotificationManager) context
+                .getSystemService(Context.NOTIFICATION_SERVICE);
+        notification.flags = notification.flags | Notification.FLAG_ONGOING_EVENT;
+        notificationManager.notify(100, notification);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        notificationManager.cancel(100);
     }
 }
 
