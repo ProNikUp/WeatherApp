@@ -56,7 +56,7 @@ public class Launcher extends AppCompatActivity {
             }
         });
         if(!SmartLocation.with(this).location().state().isAnyProviderAvailable()) {
-            Toast.makeText(getApplicationContext(),"Geolocation is unavailable",Toast.LENGTH_LONG).show();
+            //Toast.makeText(getApplicationContext(),"Geolocation is unavailable",Toast.LENGTH_LONG).show();
             editText.setVisibility(View.VISIBLE);
         }
     }
