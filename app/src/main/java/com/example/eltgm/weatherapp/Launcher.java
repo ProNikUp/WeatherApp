@@ -29,6 +29,8 @@ public class Launcher extends AppCompatActivity {
         editText = (EditText)findViewById(R.id.editText);
         editText.setVisibility(View.INVISIBLE);
         mContext = getApplicationContext();
+        //Toast.makeText(getApplicationContext(),
+             //   "Упс, что-то пошло не так", Toast.LENGTH_LONG).show();
     }
 
     public void enterWeather(View view) {
