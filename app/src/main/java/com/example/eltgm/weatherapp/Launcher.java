@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import io.nlopez.smartlocation.OnLocationUpdatedListener;
 import io.nlopez.smartlocation.SmartLocation;
@@ -30,8 +29,6 @@ public class Launcher extends AppCompatActivity {
         editText = (EditText)findViewById(R.id.editText);
         editText.setVisibility(View.INVISIBLE);
         mContext = getApplicationContext();
-        Toast.makeText(getApplicationContext(),
-                "Упс, что-то пошло не так", Toast.LENGTH_LONG).show();
     }
 
     public void enterWeather(View view) {
