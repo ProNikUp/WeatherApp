@@ -28,7 +28,7 @@ public class Launcher extends AppCompatActivity {
         setContentView(R.layout.launcher_layout);
 
         editText = (EditText)findViewById(R.id.editText);
-        editText.setVisibility(View.INVISIBLE);
+        editText.setVisibility(View.VISIBLE);
         mContext = getApplicationContext();
     }
 
@@ -39,8 +39,9 @@ public class Launcher extends AppCompatActivity {
                 + "&appid=295f7bee433d8cf26fd64d9ab085726b";
         intent.putExtra("url", url);
         startActivity(intent);
-    }
+    } //входим в приложение с вводом города вручную
 
+    //api.openweathermap.org/data/2.5/forecast?lat=35&lon=139&appid=295f7bee433d8cf26fd64d9ab085726b
     public void findPosition(View view) {
         SmartLocation.with(this).location().oneFix().start(new OnLocationUpdatedListener() {
             @Override
@@ -55,13 +56,6 @@ public class Launcher extends AppCompatActivity {
         });
         if(!SmartLocation.with(this).location().state().isAnyProviderAvailable()) {
             Toast.makeText(getApplicationContext(),"Geolocation is unavailable",Toast.LENGTH_LONG).show();
-            editText.setVisibility(View.VISIBLE);
         }
-    }
-
-    /**
-     * ДЛЯ ПОИСКА ПОГОДЫ ПО ГЕОЛОКАЦИИ
-     */
-   //api.openweathermap.org/data/2.5/forecast?lat=35&lon=139&appid=295f7bee433d8cf26fd64d9ab085726b
-
+    } //входим в приложение с геолокацией
 }

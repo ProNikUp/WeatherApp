@@ -83,9 +83,8 @@ class WeatherDay implements Parcelable{
     String getDay() {
         SimpleDateFormat parseFormat = new SimpleDateFormat("E");
         Date date = new Date((this.day + 86400)*1000);
-        String s = parseFormat.format(date);
 
-        return s;
+        return parseFormat.format(date);
     }
 
     int[] getTemp() {
@@ -99,4 +98,4 @@ class WeatherDay implements Parcelable{
     String[] getDescription() {
         return description;
     }
-}
+}//класс,хранящий погоду на день

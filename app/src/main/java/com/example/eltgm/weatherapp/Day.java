@@ -75,7 +75,7 @@ public class Day extends AppCompatActivity {
         lineChart.setDescription(description); //присвоили выключенное описание  графику(нет слов...¯\_(ツ)_/¯)
 
         lineChart.invalidate(); //обновили график
-    }
+    }//создание графиков с целыми данными
 
     public void createChart(double[] dataMas, String descr, LineChart lineChart){
         List<Entry> entries = new ArrayList<Entry>(); //входные данные для графика
@@ -110,6 +110,6 @@ public class Day extends AppCompatActivity {
         lineChart.setDescription(description);
 
         lineChart.invalidate(); //обновили график
-    }
-}
+    }//создание графиков с дробными данными
+}//класс с выводом данных по дню
 

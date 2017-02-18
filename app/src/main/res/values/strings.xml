@@ -4,4 +4,8 @@
     <string name="time">Time</string>
     <string name="enter">enter</string>
     <string name="hello">hello</string>
+    <string name="day">DayInfo</string>
+    <string name="launcher">Launcher</string>
+    <string name="dayWeather">4 Day Weather</string>
+    <string name="action_setting">Настройка</string>
 </resources>

@@ -11,15 +11,18 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".MainActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
+            android:label="@string/dayWeather">
+
         </activity>
 
         <activity android:name=".Day"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
+            android:label="@string/day">
         </activity>
 
         <activity android:name=".Launcher"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -4,12 +4,16 @@ import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Menu;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,6 +40,13 @@ public class MainActivity extends AppCompatActivity {
     private String osadki;
     private String wind;
     NotificationManager notificationManager;
+    DbHelper dbHelper;
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return super.onCreateOptionsMenu(menu);
+    } //создание меню
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,14 +55,16 @@ public class MainActivity extends AppCompatActivity {
 
         final String url = getIntent().getExtras().getString("url");
 
-        final StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+        final StringRequest stringRequest = new StringRequest(Request.Method.GET, url, //конфигурация сетевого запроса
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         final WeatherDay[] days = getWeather(response);
 
-                        dayTempSet();
 
+
+                        dayTempSet();
+                        insertToDb(days);
                         final RecyclerView rvMain = (RecyclerView) findViewById(R.id.rvMain);
                         // Create adapter passing in the sample user data
                         final WeatherAdapter adapter = new WeatherAdapter(MainActivity.this, days);
@@ -68,10 +81,156 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         final RequestQueue queue = Volley.newRequestQueue(this);
-        queue.add(stringRequest);
-
+        queue.add(stringRequest); //отправка сетевого запроса
 
     }
+
+    public void insertToDb(WeatherDay[] days) {
+
+        dbHelper = new DbHelper(getApplicationContext());
+
+        String cityString = cityName.get("name").toString();
+
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        Cursor c = db.query("cities", null, null, null, null, null, null);
+
+        boolean hasCity = false;
+        long cityId = -1;
+        if(c.moveToFirst())
+        {
+            int nameColIndex = c.getColumnIndex("name");
+            int idColIndex = c.getColumnIndex("_id");
+
+                do {
+                    if(c.getString(nameColIndex).equals(cityString))
+                    {
+                        hasCity = true;
+                        cityId = c.getInt(idColIndex);
+                        c.close();
+                        break;
+                    }
+
+                } while (c.moveToNext());
+            } else
+                c.close();
+
+
+        if(!hasCity) {
+            int k = 2;
+            JSONObject tempObj = new JSONObject();
+            JSONObject humObj = new JSONObject();
+            JSONObject presObj = new JSONObject();
+            JSONObject windObj = new JSONObject();
+            JSONObject descrObj = new JSONObject();
+
+            ContentValues cityCv = new ContentValues();
+            cityCv.put("name", cityString);
+            cityId = db.insert("cities", null, cityCv);
+
+            hasCity = true;
+            ContentValues tempValues = new ContentValues();
+            ContentValues windValues = new ContentValues();
+            ContentValues presValues = new ContentValues();
+            ContentValues humValues = new ContentValues();
+            ContentValues descrValues = new ContentValues();
+
+            for(int i=0; i < days.length; i++)
+            {
+                int count = 0;
+                int[] temps = days[i].getTemp();
+                double[] pres = days[i].getPressure();
+                double[] wind = days[i].getWindSpeed();
+                int[] hum = days[i].getHumidity();
+                String[] descr = days[i].getDescription();
+
+                for(int j = 0; j < temps.length;j++) {
+                    tempObj.put(count + "temp", temps[j]);
+                    humObj.put(count + "hum", hum[j]);
+                    presObj.put(count + "pres", pres[j]);
+                    windObj.put(count + "wind", wind[j]);
+                    descrObj.put(count + "descr", descr[j]);
+                    count+=3;
+                    // TODO Перевести массив в JSON строку!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                }
+
+                String jsonTemp = tempObj.toString();
+                tempValues.put("temp" + (k),jsonTemp);
+
+                String jsonWind = windObj.toString();
+                windValues.put("wind" + (k),jsonWind);
+
+                String jsonPres = presObj.toString();
+                presValues.put("pres" + (k),jsonPres);
+
+                String jsonHum = humObj.toString();
+                humValues.put("hum" + (k),jsonHum);
+
+                String jsonDescr = descrObj.toString();
+                descrValues.put("descr" + (k),jsonDescr);
+                k++;
+            }
+
+            db.insert("temp", null, tempValues);
+            db.insert("hum",null,humValues);
+            db.insert("pres",null,presValues);
+            db.insert("wind",null,windValues);
+            db.insert("descr",null,descrValues);
+
+        } else {
+
+
+
+        }
+
+    } // заполняем базу данных
+
+
+
+
+
+               /* cv.put("name", name);
+                cv.put("email", email);
+
+                long rowID = db.insert("mytable", null, cv);
+
+
+                Cursor c = db.query("mytable", null, null, null, null, null, null);
+
+
+                if (c.moveToFirst()) {
+
+                    int idColIndex = c.getColumnIndex("id");
+                    int nameColIndex = c.getColumnIndex("name");
+                    int emailColIndex = c.getColumnIndex("email");
+
+                    do {
+                        // получаем значения по номерам столбцов и пишем все в лог
+
+                        // переход на следующую строку
+                        // а если следующей нет (текущая - последняя), то false -
+                        // выходим из цикла
+                    } while (c.moveToNext());
+                } else
+                c.close();
+
+
+                // удаляем все записи
+                int clearCount = db.delete("mytable", null, null);
+
+
+                // подготовим значения для обновления
+                cv.put("name", name);
+                cv.put("email", email);
+                // обновляем по id
+                int updCount = db.update("mytable", cv, "id = ?",
+                        new String[] { id });
+
+
+
+        // закрываем подключение к БД
+        dbHelper.close();*/
+
 
     public WeatherDay[] getWeather(String response){
 
@@ -141,7 +300,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         return weatherDays;
-    }
+    }//создаем массив погод на 4 дня
 
     @SuppressLint("SimpleDateFormat")
     private void dayTempSet(){
@@ -182,12 +341,12 @@ public class MainActivity extends AppCompatActivity {
                 .getSystemService(Context.NOTIFICATION_SERVICE);
         notification.flags = notification.flags | Notification.FLAG_ONGOING_EVENT;
         notificationManager.notify(100, notification);
-    }
+    }//заполняем погоду для сегодняшнего дня
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         notificationManager.cancel(100);
-    }
+    } //при уничтожении активности
 }
 

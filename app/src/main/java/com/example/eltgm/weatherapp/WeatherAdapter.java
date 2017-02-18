@@ -28,7 +28,7 @@ public class WeatherAdapter extends
             tvTime = (TextView) itemView.findViewById(R.id.tvTime);
             tvDescr = (TextView) itemView.findViewById(R.id.tvDescr);
         }
-    }
+    }//класс,хранящий отображения из item , вместо того,чтоб находить их каждый раз
 
     private WeatherDay[] mWeather;
     private Context mContext;
@@ -53,7 +53,7 @@ public class WeatherAdapter extends
         // Return a new holder instance
         ViewHolder viewHolder = new ViewHolder(contactView);
         return viewHolder;
-    }
+    }//создаем объект viewholder и заполняем его отображениями из item
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
@@ -71,10 +71,10 @@ public class WeatherAdapter extends
         tvTmp.setOnClickListener(new ItemClickListener(mContext,weather));
         tvDate.setOnClickListener(new ItemClickListener(mContext,weather));
         tvDescr.setOnClickListener(new ItemClickListener(mContext,weather));
-    }
+    }//заполняем данными отображения, которые сохранили в viewholder
 
     @Override
     public int getItemCount() {
         return mWeather.length;
-    }
-}
+    }//номер элемента
+}//адаптер,переводящий данные для recycler view
