@@ -18,6 +18,23 @@ class WeatherDay implements Parcelable{
     String[] description;
     long[] day;
     String[] date;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getCityName() {
+        return cityName;
+    }
+
+    public void setCityName(String cityName) {
+        this.cityName = cityName;
+    }
+
     String cityName;
     String id;
 

@@ -282,28 +282,19 @@ public class MainActivity extends AppCompatActivity {
         JSONObject cityName = (JSONObject) cityAll.get("city");
         JSONArray cityWeatherList = (JSONArray) cityAll.get("list");
 
-        JSONObject osdkiObj =(JSONObject) cityWeatherList.get(0);
-        JSONArray osadkiWeather = (JSONArray) osdkiObj.get("weather");
-        JSONObject windObj = (JSONObject) osdkiObj.get("wind");
-//        String wind = windObj.get("speed").toString();
-
-        JSONObject osadkiWeatherArray = (JSONObject) osadkiWeather.get(0);
-       // String osadki = osadkiWeatherArray.get("description").toString();
-
         Weather[] tempBuff = new Weather[cityWeatherList.size()];
 
         for(int i = 0; i < tempBuff.length; i++){
             JSONObject cityDayWeather = (JSONObject) cityWeatherList.get(i);
             JSONObject cityDayTempAll = (JSONObject) cityDayWeather.get("main");
-            JSONArray descriptionArray = (JSONArray) cityDayWeather.get("weather");
-            JSONObject descriptionObject = (JSONObject) descriptionArray.get(0);
+            JSONObject descriptionObject = (JSONObject) ((JSONArray) cityDayWeather.get("weather")).get(0);
             String nowTempK =  cityDayTempAll.get("temp").toString();
             JSONObject innerWind = (JSONObject) cityDayWeather.get("wind");
 
             Weather temp = new Weather(Double.valueOf(nowTempK) - 273.15,cityDayWeather.get("dt_txt").toString(),descriptionObject.get("description").toString(),
                     Double.valueOf(innerWind.get("speed").toString()),Integer.valueOf(cityDayTempAll.get("humidity").toString()),
                     Integer.valueOf(cityDayWeather.get("dt").toString()), Double.valueOf(cityDayTempAll.get("pressure").toString()),String.valueOf(((JSONObject)cityAll.get("city")).get("id"))
-                    ,String.valueOf(cityName));
+                    ,String.valueOf(cityName.get("name")));
             tempBuff[i] = temp;
         }
 
@@ -349,10 +340,10 @@ public class MainActivity extends AppCompatActivity {
         SimpleDateFormat dateFormat;
         dateFormat = new SimpleDateFormat("dd MMM yyyy H:mm");
 
-        tvCityName.setText(days[0].cityName);
+        tvCityName.setText(days[0].getCityName());
         tvDay.setText(dateFormat.format(date));
-        tvDayTemp.setText(String.valueOf(days[0].getTemp()));
-        tvOsadki.setText(days[0].getDescription()[0]);
+        tvDayTemp.setText(String.valueOf((days[0].getTemp())[0]));
+        tvOsadki.setText((days[0].getDescription())[0]);
         tvWind.setText("wind speed: " + days[0].getWindSpeed()[0] + "m/s");
 
         Context context = getApplicationContext();
