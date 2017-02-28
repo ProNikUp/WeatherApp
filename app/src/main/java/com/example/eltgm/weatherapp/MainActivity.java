@@ -358,7 +358,7 @@ public class MainActivity extends AppCompatActivity {
         builder.setContentIntent(contentIntent)
                 .setSmallIcon(android.R.drawable.ic_media_next)
                 .setContentTitle(days[0].cityName)
-                .setContentText(String.valueOf(days[0].getTemp())); // Текст уведомления
+                .setContentText(String.valueOf((days[0].getTemp())[0])); // Текст уведомления
 
         // Notification notification = builder.getNotification(); // до API 16
         Notification notification = builder.build();
