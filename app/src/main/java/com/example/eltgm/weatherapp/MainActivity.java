@@ -34,11 +34,7 @@ import java.util.Arrays;
 import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
-    JSONObject cityName;
 
-    private Weather[] tempBuff;
-    private String osadki;
-    private String wind;
     NotificationManager notificationManager;
     DbHelper dbHelper;
 
@@ -47,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return super.onCreateOptionsMenu(menu);
     } //создание меню
-
+    //TODO меню
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,13 +57,13 @@ public class MainActivity extends AppCompatActivity {
                     public void onResponse(String response) {
                         final WeatherDay[] days = getWeather(response);
 
-
-
-                        dayTempSet();
+                        dayTempSet(days);
                         insertToDb(days);
+                        WeatherDay[] daysFour = Arrays.copyOfRange(days,1,days.length); // передаем только 4 дня,не включая сегодняшний
                         final RecyclerView rvMain = (RecyclerView) findViewById(R.id.rvMain);
                         // Create adapter passing in the sample user data
-                        final WeatherAdapter adapter = new WeatherAdapter(MainActivity.this, days);
+
+                        final WeatherAdapter adapter = new WeatherAdapter(MainActivity.this, daysFour);
                         // Attach the adapter to the recyclerview to populate items
                         rvMain.setAdapter(adapter);
                         // Set layout manager to position the items
@@ -89,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
 
         dbHelper = new DbHelper(getApplicationContext());
 
-        String cityString = cityName.get("name").toString();
+        String cityString = days[0].cityName;
 
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
@@ -116,8 +112,10 @@ public class MainActivity extends AppCompatActivity {
                 c.close();
 
 
+        String ID = days[0].id;
+
         if(!hasCity) {
-            int k = 2;
+            int k = 1;
             JSONObject tempObj = new JSONObject();
             JSONObject humObj = new JSONObject();
             JSONObject presObj = new JSONObject();
@@ -143,14 +141,18 @@ public class MainActivity extends AppCompatActivity {
                 double[] wind = days[i].getWindSpeed();
                 int[] hum = days[i].getHumidity();
                 String[] descr = days[i].getDescription();
+                long[] sec = days[i].getDaySec();
 
                 for(int j = 0; j < temps.length;j++) {
-                    tempObj.put(count + "temp", temps[j]);
-                    humObj.put(count + "hum", hum[j]);
-                    presObj.put(count + "pres", pres[j]);
-                    windObj.put(count + "wind", wind[j]);
-                    descrObj.put(count + "descr", descr[j]);
-                    count+=3;
+                    SimpleDateFormat parseFormat = new SimpleDateFormat("H");
+                    Date date = new Date((sec[j]-10800)*1000);
+                    String newDate = parseFormat.format(date);
+
+                    tempObj.put(newDate + "temp", temps[j]);
+                    humObj.put(newDate + "hum", hum[j]);
+                    presObj.put(newDate + "pres", pres[j]);
+                    windObj.put(newDate + "wind", wind[j]);
+                    descrObj.put(newDate + "descr", descr[j]);
                     // TODO Перевести массив в JSON строку!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                 }
 
@@ -171,6 +173,12 @@ public class MainActivity extends AppCompatActivity {
                 k++;
             }
 
+            tempValues.put("city_id",Long.valueOf(ID));
+            humValues.put("city_id",Long.valueOf(ID));
+            presValues.put("city_id",Long.valueOf(ID));
+            windValues.put("city_id",Long.valueOf(ID));
+            descrValues.put("city_id",Long.valueOf(ID));
+
             db.insert("temp", null, tempValues);
             db.insert("hum",null,humValues);
             db.insert("pres",null,presValues);
@@ -179,30 +187,74 @@ public class MainActivity extends AppCompatActivity {
 
         } else {
 
+            int k = 1;
+            JSONObject tempObj = new JSONObject();
+            JSONObject humObj = new JSONObject();
+            JSONObject presObj = new JSONObject();
+            JSONObject windObj = new JSONObject();
+            JSONObject descrObj = new JSONObject();
 
+
+            ContentValues tempValues = new ContentValues();
+            ContentValues windValues = new ContentValues();
+            ContentValues presValues = new ContentValues();
+            ContentValues humValues = new ContentValues();
+            ContentValues descrValues = new ContentValues();
+
+            for(int i=0; i < days.length; i++)
+            {
+                int count = 0;
+                int[] temps = days[i].getTemp();
+                double[] pres = days[i].getPressure();
+                double[] wind = days[i].getWindSpeed();
+                int[] hum = days[i].getHumidity();
+                String[] descr = days[i].getDescription();
+                long[] sec = days[i].getDaySec();
+
+                for(int j = 0; j < temps.length;j++) {
+                    SimpleDateFormat parseFormat = new SimpleDateFormat("H");
+                    Date date = new Date((sec[j]-10800)*1000);
+                    String newDate = parseFormat.format(date);
+
+                    tempObj.put(newDate + "temp", temps[j]);
+                    humObj.put(newDate + "hum", hum[j]);
+                    presObj.put(newDate + "pres", pres[j]);
+                    windObj.put(newDate + "wind", wind[j]);
+                    descrObj.put(newDate + "descr", descr[j]);
+
+                    // TODO Перевести массив в JSON строку!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                }
+
+                String jsonTemp = tempObj.toString();
+                tempValues.put("temp" + (k),jsonTemp);
+
+                String jsonWind = windObj.toString();
+                windValues.put("wind" + (k),jsonWind);
+
+                String jsonPres = presObj.toString();
+                presValues.put("pres" + (k),jsonPres);
+
+                String jsonHum = humObj.toString();
+                humValues.put("hum" + (k),jsonHum);
+
+                String jsonDescr = descrObj.toString();
+                descrValues.put("descr" + (k),jsonDescr);
+                k++;
+            }
+
+            tempValues.put("city_id",Long.valueOf(ID));
+            humValues.put("city_id",Long.valueOf(ID));
+            presValues.put("city_id",Long.valueOf(ID));
+            windValues.put("city_id",Long.valueOf(ID));
+            descrValues.put("city_id",Long.valueOf(ID));
+
+            db.update("temp", tempValues, "_id = " + cityId,null);
+            db.update("hum", humValues, "_id = " + cityId,null);
+            db.update("pres", presValues, "_id = " + cityId,null);
+            db.update("wind", windValues, "_id = " + cityId,null);
+            db.update("descr", descrValues, "_id = " + cityId,null);
 
         }
-
-    } // заполняем базу данных
-
-
-
-
-
-               /* cv.put("name", name);
-                cv.put("email", email);
-
-                long rowID = db.insert("mytable", null, cv);
-
-
-                Cursor c = db.query("mytable", null, null, null, null, null, null);
-
-
-                if (c.moveToFirst()) {
-
-                    int idColIndex = c.getColumnIndex("id");
-                    int nameColIndex = c.getColumnIndex("name");
-                    int emailColIndex = c.getColumnIndex("email");
 
                     do {
                         // получаем значения по номерам столбцов и пишем все в лог
@@ -211,25 +263,7 @@ public class MainActivity extends AppCompatActivity {
                         // а если следующей нет (текущая - последняя), то false -
                         // выходим из цикла
                     } while (c.moveToNext());
-                } else
-                c.close();
-
-
-                // удаляем все записи
-                int clearCount = db.delete("mytable", null, null);
-
-
-                // подготовим значения для обновления
-                cv.put("name", name);
-                cv.put("email", email);
-                // обновляем по id
-                int updCount = db.update("mytable", cv, "id = ?",
-                        new String[] { id });
-
-
-
-        // закрываем подключение к БД
-        dbHelper.close();*/
+                }
 
 
     public WeatherDay[] getWeather(String response){
@@ -245,18 +279,18 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         JSONObject cityAll = (JSONObject) JSONobj;
-        cityName = (JSONObject) cityAll.get("city");
+        JSONObject cityName = (JSONObject) cityAll.get("city");
         JSONArray cityWeatherList = (JSONArray) cityAll.get("list");
 
         JSONObject osdkiObj =(JSONObject) cityWeatherList.get(0);
         JSONArray osadkiWeather = (JSONArray) osdkiObj.get("weather");
         JSONObject windObj = (JSONObject) osdkiObj.get("wind");
-        wind = windObj.get("speed").toString();
+//        String wind = windObj.get("speed").toString();
 
         JSONObject osadkiWeatherArray = (JSONObject) osadkiWeather.get(0);
-        osadki = osadkiWeatherArray.get("description").toString();
+       // String osadki = osadkiWeatherArray.get("description").toString();
 
-        tempBuff = new Weather[cityWeatherList.size()];
+        Weather[] tempBuff = new Weather[cityWeatherList.size()];
 
         for(int i = 0; i < tempBuff.length; i++){
             JSONObject cityDayWeather = (JSONObject) cityWeatherList.get(i);
@@ -268,7 +302,8 @@ public class MainActivity extends AppCompatActivity {
 
             Weather temp = new Weather(Double.valueOf(nowTempK) - 273.15,cityDayWeather.get("dt_txt").toString(),descriptionObject.get("description").toString(),
                     Double.valueOf(innerWind.get("speed").toString()),Integer.valueOf(cityDayTempAll.get("humidity").toString()),
-                    Integer.valueOf(cityDayWeather.get("dt").toString()), Double.valueOf(cityDayTempAll.get("pressure").toString()));
+                    Integer.valueOf(cityDayWeather.get("dt").toString()), Double.valueOf(cityDayTempAll.get("pressure").toString()),String.valueOf(((JSONObject)cityAll.get("city")).get("id"))
+                    ,String.valueOf(cityName));
             tempBuff[i] = temp;
         }
 
@@ -277,13 +312,13 @@ public class MainActivity extends AppCompatActivity {
                 break;
             }
         }
-        tempDay = Arrays.copyOfRange(tempBuff,start,tempBuff.length);
+        tempDay = Arrays.copyOfRange(tempBuff,0,tempBuff.length);
 
         int count = 0;
         int oldCount = count;
-        WeatherDay[] weatherDays = new WeatherDay[4];
+        WeatherDay[] weatherDays = new WeatherDay[5];
 
-        for(int i = 0; i < 4; i++)
+        for(int i = 0; i < 5; i++)
             for(; count <= tempDay.length; count++){
                 if(count == tempDay.length){
                     Weather[] tempDays = Arrays.copyOfRange(tempDay, oldCount, count);
@@ -300,10 +335,10 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         return weatherDays;
-    }//создаем массив погод на 4 дня
+    }//создаем массив погод на 5 дня
 
     @SuppressLint("SimpleDateFormat")
-    private void dayTempSet(){
+    private void dayTempSet(WeatherDay[] days){
         final TextView tvDay = (TextView)findViewById(R.id.tvDay);
         final TextView tvDayTemp = (TextView)findViewById(R.id.tvDayTemp);
         final TextView tvWind = (TextView)findViewById(R.id.tvWind);
@@ -314,11 +349,11 @@ public class MainActivity extends AppCompatActivity {
         SimpleDateFormat dateFormat;
         dateFormat = new SimpleDateFormat("dd MMM yyyy H:mm");
 
-        tvCityName.setText(cityName.get("name").toString());
+        tvCityName.setText(days[0].cityName);
         tvDay.setText(dateFormat.format(date));
-        tvDayTemp.setText(String.valueOf(tempBuff[0].getTemp()));
-        tvOsadki.setText(osadki);
-        tvWind.setText("wind speed: " + wind + "m/s");
+        tvDayTemp.setText(String.valueOf(days[0].getTemp()));
+        tvOsadki.setText(days[0].getDescription()[0]);
+        tvWind.setText("wind speed: " + days[0].getWindSpeed()[0] + "m/s");
 
         Context context = getApplicationContext();
 
@@ -331,8 +366,8 @@ public class MainActivity extends AppCompatActivity {
 
         builder.setContentIntent(contentIntent)
                 .setSmallIcon(android.R.drawable.ic_media_next)
-                .setContentTitle(cityName.get("name").toString())
-                .setContentText(String.valueOf(tempBuff[0].getTemp())); // Текст уведомления
+                .setContentTitle(days[0].cityName)
+                .setContentText(String.valueOf(days[0].getTemp())); // Текст уведомления
 
         // Notification notification = builder.getNotification(); // до API 16
         Notification notification = builder.build();

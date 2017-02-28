@@ -16,7 +16,10 @@ class WeatherDay implements Parcelable{
     int[] humidity;
     double[] windSpeed;
     String[] description;
-    int day;
+    long[] day;
+    String[] date;
+    String cityName;
+    String id;
 
     WeatherDay(Weather[] weathers){
         temp = new int[weathers.length];
@@ -24,6 +27,8 @@ class WeatherDay implements Parcelable{
         humidity = new int[weathers.length];
         windSpeed = new double[weathers.length];
         description = new String[weathers.length];
+        day = new long[weathers.length];
+        date = new String[weathers.length];
 
         for(int i = 0; i < weathers.length; i++){
             temp[i] = weathers[i].getTemp();
@@ -31,8 +36,12 @@ class WeatherDay implements Parcelable{
             humidity[i] = weathers[i].getHumidity();
             windSpeed[i] = weathers[i].getWindSpeed();
             description[i] = weathers[i].getDescription();
+            day[i] = weathers[i].getDay();
+            date[i] = weathers[i].getDate();
         }
-        day = weathers[0].getDay();
+        cityName = weathers[0].getCityName();
+        id = weathers[0].getId();
+
     }
 
 
@@ -42,7 +51,10 @@ class WeatherDay implements Parcelable{
         this.humidity = in.createIntArray();
         this.windSpeed = in.createDoubleArray();
         this.description = in.createStringArray();
-        this.day = in.readInt();
+        this.day = in.createLongArray();
+        this.date = in.createStringArray();
+        this.cityName = in.readString();
+        this.id = in.readString();
     }
 
     @Override
@@ -57,7 +69,10 @@ class WeatherDay implements Parcelable{
         dest.writeIntArray(humidity);
         dest.writeDoubleArray(windSpeed);
         dest.writeStringArray(description);
-        dest.writeInt(day);
+        dest.writeLongArray(day);
+        dest.writeStringArray(date);
+        dest.writeString(cityName);
+        dest.writeString(id);
     }
 
     public static final Creator<WeatherDay> CREATOR = new Creator<WeatherDay>() {
@@ -82,7 +97,7 @@ class WeatherDay implements Parcelable{
 
     String getDay() {
         SimpleDateFormat parseFormat = new SimpleDateFormat("E");
-        Date date = new Date((this.day + 86400)*1000);
+        Date date = new Date((this.day[1] + 86400)*1000);
 
         return parseFormat.format(date);
     }
@@ -97,5 +112,8 @@ class WeatherDay implements Parcelable{
 
     String[] getDescription() {
         return description;
+    }
+    long[] getDaySec(){
+        return this.day;
     }
 }//класс,хранящий погоду на день
