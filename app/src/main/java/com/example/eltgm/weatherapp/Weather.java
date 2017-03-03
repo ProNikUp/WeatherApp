@@ -4,12 +4,45 @@ package com.example.eltgm.weatherapp;
  * Created by eltgm on 20.12.2016.
  */
 
-public class Weather {
+public class Weather{
     private int tmp;
     String date;
     private double pressure;
     private int humidity;
     private double windSpeed;
+
+    public void setTmp(int tmp) {
+        this.tmp = tmp;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public void setPressure(double pressure) {
+        this.pressure = pressure;
+    }
+
+    public void setHumidity(int humidity) {
+        this.humidity = humidity;
+    }
+
+    public void setWindSpeed(double windSpeed) {
+        this.windSpeed = windSpeed;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setDay(int day) {
+        this.day = day;
+    }
+
+    public void setCityName(String cityName) {
+        this.cityName = cityName;
+    }
+
     private String description;
     private int day;
     private String cityName;
@@ -48,6 +81,10 @@ public class Weather {
         this.cityName = cityName;
     }
 
+    public Weather(String json){
+
+    }
+
     int getTemp() {
         return tmp;
     }
@@ -56,16 +93,8 @@ public class Weather {
         return date;
     }
 
-    void setDate(String date) {
-        this.date = date;
-    }
-
     public String getCityName() {
         return cityName;
-    }
-
-    public void setCityName(String cityName) {
-        this.cityName = cityName;
     }
 
     public String getId() {
@@ -75,4 +104,5 @@ public class Weather {
     public void setId(String id) {
         this.id = id;
     }
+
 }

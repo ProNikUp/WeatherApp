@@ -25,21 +25,33 @@ public class Day extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.day_layout);
         WeatherDay weatherDay = getIntent().getExtras().getParcelable("weatherDay");
+        int[] temp = new int[weatherDay.getDay().length];
+        double[] pres = new double[weatherDay.getDay().length];
+        double[] windspeed = new double[weatherDay.getDay().length];
+        int[] humidity = new int[weatherDay.getDay().length];
 
-        int[] temp = weatherDay.temp; //создали массив с температурами на 8 дней
-        double[] pres = weatherDay.pressure;
-        int[] humidity = weatherDay.humidity;
-        double[] windspeed = weatherDay.windSpeed;
+        for (int i = 0; i < weatherDay.getDay().length; i++) {
 
-        LineChart charttemp = (LineChart) findViewById(R.id.charttemp);
-        LineChart chartpres = (LineChart) findViewById(R.id.chartpres);
-        LineChart charthumi = (LineChart) findViewById(R.id.charthumidity);
-        LineChart chartwind = (LineChart) findViewById(R.id.chartwind);
 
-        createChart(temp,"Temperature", charttemp);
-        createChart(pres,"Pressure", chartpres);
-        createChart(humidity,"Humidity",charthumi);
-        createChart(windspeed,"Wind speed", chartwind);
+            int count = 0;
+
+            for (int j = 0; j < temp.length; j++) {
+                temp[j] = (weatherDay.getDay())[j].getTemp();
+                pres[j] = (weatherDay.getDay())[j].getPressure();
+                windspeed[j] = (weatherDay.getDay())[j].getWindSpeed();
+                humidity[j] = (weatherDay.getDay())[j].getHumidity();
+            }
+
+            LineChart charttemp = (LineChart) findViewById(R.id.charttemp);
+            LineChart chartpres = (LineChart) findViewById(R.id.chartpres);
+            LineChart charthumi = (LineChart) findViewById(R.id.charthumidity);
+            LineChart chartwind = (LineChart) findViewById(R.id.chartwind);
+
+            createChart(temp, "Temperature", charttemp);
+            createChart(pres, "Pressure", chartpres);
+            createChart(humidity, "Humidity", charthumi);
+            createChart(windspeed, "Wind speed", chartwind);
+        }
     }
 
     public void createChart(int[] dataMas, String descr, LineChart lineChart){

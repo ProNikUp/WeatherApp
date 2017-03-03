@@ -22,7 +22,7 @@ public class ItemClickListener implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         Intent intent = new Intent(mContext, Day.class);
-        intent.putExtra("weatherDay", weatherDay);
+        //intent.putExtra("weatherDay", weatherDay);
         Bundle bundle = null;
         startActivity(mContext,intent,bundle);
     }

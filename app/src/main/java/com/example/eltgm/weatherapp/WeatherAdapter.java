@@ -38,10 +38,6 @@ public class WeatherAdapter extends
         mContext = context;
     }
 
-    private Context getContext() {
-        return mContext;
-    }
-
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
@@ -62,11 +58,11 @@ public class WeatherAdapter extends
         WeatherDay weather = mWeather[position];
         // Set item views based on your views and data model
         TextView tvDate = viewHolder.tvTime;
-        tvDate.setText(weather.getDay());
+        tvDate.setText((weather.getDay())[0].getDate());
         TextView tvDescr = viewHolder.tvDescr;
-        tvDescr.setText(weather.getDescription()[3]);
+        tvDescr.setText((weather.getDay())[3].getDescription());
         TextView tvTmp = viewHolder.tvTmp;
-        tvTmp.setText("n: " + String.valueOf(weather.getTemp()[1]) + "\n" + "d: " + String.valueOf(weather.getTemp()[6]));
+        tvTmp.setText("n: " + String.valueOf((weather.getDay())[1].getTemp()) + "\n" + "d: " + String.valueOf((weather.getDay())[6].getTemp()));
 
         tvTmp.setOnClickListener(new ItemClickListener(mContext,weather));
         tvDate.setOnClickListener(new ItemClickListener(mContext,weather));
