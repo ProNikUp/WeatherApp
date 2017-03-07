@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
                     public void onResponse(String response) {
                         final WeatherDay[] days = getWeather(response);
 
-                        dayTempSet(days);
+                        dayTempSet(dbHelper.getCityWeather(null,dbHelper));
                         insertToDb(days);
                         WeatherDay[] daysFour = Arrays.copyOfRange(days,1,days.length); // передаем только 4 дня,не включая сегодняшний
                         final RecyclerView rvMain = (RecyclerView) findViewById(R.id.rvMain);
@@ -126,6 +126,7 @@ public class MainActivity extends AppCompatActivity {
             JSONObject presObj = new JSONObject();
             JSONObject windObj = new JSONObject();
             JSONObject descrObj = new JSONObject();
+            JSONObject dayObj = new JSONObject();
 
             ContentValues cityCv = new ContentValues();
             cityCv.put("name", cityString);
@@ -169,8 +170,15 @@ public class MainActivity extends AppCompatActivity {
                     presObj.put(newDate + "pres", pres[j]);
                     windObj.put(newDate + "wind", wind[j]);
                     descrObj.put(newDate + "descr", descr[j]);
+
                     // TODO Перевести массив в JSON строку!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                 }
+
+                tempObj.put("day",sec[0]);
+                humObj.put("day",sec[0]);
+                presObj.put("day",sec[0]);
+                windObj.put("day",sec[0]);
+                descrObj.put("day",sec[0]);
 
                 String jsonTemp = tempObj.toString();
                 tempValues.put("temp" + (k),jsonTemp);
@@ -251,6 +259,11 @@ public class MainActivity extends AppCompatActivity {
                     windObj.put(newDate + "wind", weathers[j].getWindSpeed());
                     descrObj.put(newDate + "descr", weathers[j].getDescription());
                 }
+                tempObj.put("day",sec[0]);
+                humObj.put("day",sec[0]);
+                presObj.put("day",sec[0]);
+                windObj.put("day",sec[0]);
+                descrObj.put("day",sec[0]);
 
                 String jsonTemp = tempObj.toString();
                 tempValues.put("temp" + (k),jsonTemp);
@@ -352,7 +365,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     @SuppressLint("SimpleDateFormat")
-    private void dayTempSet(WeatherDay[] days){
+    private void dayTempSet(WeatherDay days){
         final TextView tvDay = (TextView)findViewById(R.id.tvDay);
         final TextView tvDayTemp = (TextView)findViewById(R.id.tvDayTemp);
         final TextView tvWind = (TextView)findViewById(R.id.tvWind);
@@ -363,11 +376,11 @@ public class MainActivity extends AppCompatActivity {
         SimpleDateFormat dateFormat;
         dateFormat = new SimpleDateFormat("dd MMM yyyy H:mm");
 
-        tvCityName.setText((days[0].getDay())[0].getCityName());
+        tvCityName.setText((days.getDay())[0].getCityName());
         tvDay.setText(dateFormat.format(date));
-        tvDayTemp.setText(String.valueOf((days[0].getDay())[0].getTemp()));
-        tvOsadki.setText((days[0].getDay())[0].getDescription());
-        tvWind.setText("wind speed: " + days[0].getDay()[0].getWindSpeed() + "m/s");
+        tvDayTemp.setText(String.valueOf((days.getDay())[0].getTemp()));
+        tvOsadki.setText((days.getDay())[0].getDescription());
+        tvWind.setText("wind speed: " + days.getDay()[0].getWindSpeed() + "m/s");
 
         Context context = getApplicationContext();
 
@@ -380,8 +393,8 @@ public class MainActivity extends AppCompatActivity {
 
         builder.setContentIntent(contentIntent)
                 .setSmallIcon(android.R.drawable.ic_media_next)
-                .setContentTitle((days[0].getDay())[0].getCityName())
-                .setContentText(String.valueOf((days[0].getDay())[0].getTemp())); // Текст уведомления
+                .setContentTitle((days.getDay())[0].getCityName())
+                .setContentText(String.valueOf((days.getDay())[0].getTemp())); // Текст уведомления
 
         // Notification notification = builder.getNotification(); // до API 16
         Notification notification = builder.build();

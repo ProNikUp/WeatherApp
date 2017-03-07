@@ -1,5 +1,8 @@
 package com.example.eltgm.weatherapp;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * Created by eltgm on 20.12.2016.
  */
@@ -10,6 +13,11 @@ public class Weather{
     private double pressure;
     private int humidity;
     private double windSpeed;
+    private String description;
+    private long day;
+    private String cityName;
+    private String id;
+
 
     public void setTmp(int tmp) {
         this.tmp = tmp;
@@ -35,7 +43,7 @@ public class Weather{
         this.description = description;
     }
 
-    public void setDay(int day) {
+    public void setDay(long day) {
         this.day = day;
     }
 
@@ -43,12 +51,7 @@ public class Weather{
         this.cityName = cityName;
     }
 
-    private String description;
-    private int day;
-    private String cityName;
-    private String id;
-
-    int getDay() {
+    long getDay() {
         return day;
     }
 
@@ -90,7 +93,9 @@ public class Weather{
     }
 
     String getDate() {
-        return date;
+        Date date1 = new Date((getDay()-86400)*1000);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("E");
+        return dateFormat.format(date1);
     }
 
     public String getCityName() {

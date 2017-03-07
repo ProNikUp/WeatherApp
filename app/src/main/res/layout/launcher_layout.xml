@@ -5,15 +5,6 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:text="@string/hello"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="86dp"
-        android:id="@+id/tvEnter" />
-
     <Button
         android:text="@string/enter"
         android:layout_width="wrap_content"
@@ -39,10 +30,9 @@
         android:text="Определить местоположение"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignRight="@+id/button"
-        android:layout_alignEnd="@+id/button"
         android:id="@+id/button2"
-        android:onClick="findPosition"/>
+        android:onClick="findPosition"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>
