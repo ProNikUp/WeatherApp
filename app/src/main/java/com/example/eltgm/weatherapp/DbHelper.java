@@ -44,13 +44,21 @@ public class DbHelper extends SQLiteOpenHelper {
 
             if(cityId == null)
             {
-                Cursor temps = db.query("temp",null, "city_id='"+c.getInt(c.getColumnIndex("city_id"))+"'",null, null, null,null);
-                Cursor hum = db.query("hum",null, "city_id='"+c.getInt(cityIdColIndex)+"'",null, null, null,null);
-                Cursor pres = db.query("pres",null, "city_id='"+c.getInt(cityIdColIndex)+"'",null, null, null,null);
-                Cursor wind = db.query("wind",null, "city_id='"+c.getInt(cityIdColIndex)+"'",null, null, null,null);
-                Cursor descr = db.query("descr",null, "city_id='"+c.getInt(cityIdColIndex)+"'",null, null, null,null);
+                int test1 = c.getInt(c.getColumnIndex("city_id"));
+                String test2 =  String.valueOf(c.getString(c.getColumnIndex("name")));
 
-               if(temps.moveToFirst() && hum.moveToFirst() && pres.moveToFirst() && wind.moveToFirst() && descr.moveToFirst()){
+
+
+
+
+                Cursor temps = db.query("temp",null, "city_id="+c.getInt(c.getColumnIndex("city_id"))+"",null, null, null,null);
+                Cursor hum = db.query("hum",null, "city_id="+c.getInt(cityIdColIndex)+"",null, null, null,null);
+                Cursor pres = db.query("pres",null, "city_id="+c.getInt(cityIdColIndex)+"",null, null, null,null);
+                Cursor wind = db.query("wind",null, "city_id="+c.getInt(cityIdColIndex)+"",null, null, null,null);
+                Cursor descr = db.query("descr",null, "city_id="+c.getInt(cityIdColIndex)+"",null, null, null,null);
+
+               if(temps.moveToFirst() && hum.moveToFirst() && pres.moveToFirst() && wind.moveToFirst()
+                       && descr.moveToFirst()){
                    dayJson = temps.getString(temps.getColumnIndex("temp1"));
                    JSONParser parser = new JSONParser();
                    Object JSONobj = null;
@@ -62,17 +70,19 @@ public class DbHelper extends SQLiteOpenHelper {
                    }
                    JSONObject tempObj = (JSONObject) JSONobj;
 
-                   int dayValue = (int)tempObj.get("day");
-                   if(dayValue == new Date().getSeconds()) { // int past = (new Date().getSeconds() - dayValue)/3600= кол-во прошедших дней
+                   long dayValue = (long)tempObj.get("day");
+                   if(new Date().getTime()/1000 - dayValue <= 3600 ) { // int past = (new Date().getSeconds() - dayValue)/3600= кол-во прошедших дней
                        // "temp" + past + 1
-                       temp1Json = temps.getString(temps.getColumnIndex("temp" + 1));
-                       hum1Json = hum.getString(hum.getColumnIndex("hum" + 1));
-                       pres1Json = pres.getString(pres.getColumnIndex("pres" + 1));
-                       wind1Json = wind.getString(wind.getColumnIndex("wind" + 1));
-                       descr1Json = descr.getString(descr.getColumnIndex("descr" + 1));
+                       temp1Json = temps.getString(temps.getColumnIndex("temp1"));
+                       hum1Json = hum.getString(hum.getColumnIndex("hum1" ));
+                       pres1Json = pres.getString(pres.getColumnIndex("pres1"));
+                       wind1Json = wind.getString(wind.getColumnIndex("wind1" ));
+                       descr1Json = descr.getString(descr.getColumnIndex("descr1"));
                        return new WeatherDay(temp1Json, hum1Json, pres1Json, wind1Json, descr1Json);
                    }else{
-                       int past = (new Date().getSeconds() - dayValue)/3600 + 1;
+                       long ttt = new Date().getTime();
+
+                       long past = (new Date().getTime()/1000 - dayValue)/3600 + 1;
                        temp1Json = temps.getString(temps.getColumnIndex("temp" + past));
                        hum1Json = hum.getString(temps.getColumnIndex("hum" + past));
                        pres1Json = pres.getString(temps.getColumnIndex("pres" + past));

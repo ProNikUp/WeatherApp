@@ -25,10 +25,10 @@ public class Day extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.day_layout);
         WeatherDay weatherDay = getIntent().getExtras().getParcelable("weatherDay");
-        int[] temp = new int[weatherDay.getDay().length];
+        long[] temp = new long[weatherDay.getDay().length];
         double[] pres = new double[weatherDay.getDay().length];
         double[] windspeed = new double[weatherDay.getDay().length];
-        int[] humidity = new int[weatherDay.getDay().length];
+        long[] humidity = new long[weatherDay.getDay().length];
 
         for (int i = 0; i < weatherDay.getDay().length; i++) {
 
@@ -54,10 +54,10 @@ public class Day extends AppCompatActivity {
         }
     }
 
-    public void createChart(int[] dataMas, String descr, LineChart lineChart){
+    public void createChart(long[] dataMas, String descr, LineChart lineChart){
         List<Entry> entries = new ArrayList<Entry>(); //входные данные для графика
         int count = 0;
-        for(int data:dataMas) {
+        for(long data:dataMas) {
             entries.add(new Entry(count, data)); //добавляем точку  на график (по x - временной отрезок,
             // по y - температура для этого временного отрезка)
             count+=3;

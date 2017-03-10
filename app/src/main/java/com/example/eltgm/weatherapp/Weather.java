@@ -8,10 +8,10 @@ import java.util.Date;
  */
 
 public class Weather{
-    private int tmp;
+    private long tmp;
     String date;
     private double pressure;
-    private int humidity;
+    private long humidity;
     private double windSpeed;
     private String description;
     private long day;
@@ -19,7 +19,7 @@ public class Weather{
     private String id;
 
 
-    public void setTmp(int tmp) {
+    public void setTmp(long tmp) {
         this.tmp = tmp;
     }
 
@@ -31,7 +31,7 @@ public class Weather{
         this.pressure = pressure;
     }
 
-    public void setHumidity(int humidity) {
+    public void setHumidity(long humidity) {
         this.humidity = humidity;
     }
 
@@ -63,7 +63,7 @@ public class Weather{
         return windSpeed;
     }
 
-    int getHumidity() {
+    long getHumidity() {
         return humidity;
     }
 
@@ -88,7 +88,7 @@ public class Weather{
 
     }
 
-    int getTemp() {
+    long getTemp() {
         return tmp;
     }
 

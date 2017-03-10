@@ -45,27 +45,23 @@ class WeatherDay {
         JSONObject presObj = (JSONObject) JSONobj4;
         JSONObject descrObj = (JSONObject) JSONobj5;
         for(int i = 0; i < tempObj.size(); i++){
-            int tmp = (int) tempObj.get(count+"temp");
-            int hum = (int) humObj.get(count+"hum");
-            double wind = (double) windObj.get(count+"wind");
-            double pres = (double) presObj.get(count+"pres");
-            String descr = String.valueOf(descrObj.get(count+"descr"));
-            if(Integer.valueOf(tmp) != null) {
+            while (!tempObj.containsKey(count+"temp"))
+                count+=3;
+/*            if(!tempObj.containsKey(count+"temp")) {
+
+            }else{*/
+            while (tempObj.containsKey(count+"temp")){
+                long tmp = Long.parseLong(tempObj.get(count+"temp").toString());
+                long hum =  Long.parseLong(humObj.get(count+"hum").toString());
+                double wind = Double.parseDouble(windObj.get(count+"wind").toString());
+                double pres = Double.parseDouble(presObj.get(count+"pres").toString());
+                String descr = String.valueOf(descrObj.get(count+"descr"));
                 day[i].setTmp(tmp);
                 day[i].setHumidity(hum);
                 day[i].setWindSpeed(wind);
                 day[i].setPressure(pres);
                 day[i].setDescription(descr);
                 count+=3;
-            }else{
-                while (Integer.valueOf(tmp) == null){
-                    count+=3;
-                    tmp = (int) tempObj.get(count+"temp");
-                    hum = (int) humObj.get(count+"hum");
-                    wind = (double) windObj.get(count+"wind");
-                    pres = (double) presObj.get(count+"pres");
-                    descr = String.valueOf(descrObj.get(count+"descr"));
-                }
             }
         }
 

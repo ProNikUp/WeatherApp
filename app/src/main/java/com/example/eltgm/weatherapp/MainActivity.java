@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
         Cursor c = db.query("cities", null, null, null, null, null, null);
 
         boolean hasCity = false;
-        long cityId = -1;
+        long cityId = Long.parseLong((days[0].getDay())[0].getId());
         if(c.moveToFirst())
         {
             int nameColIndex = c.getColumnIndex("name");
@@ -113,8 +113,10 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                 } while (c.moveToNext());
-            } else
-                c.close();
+            } else {
+            c.close();
+            }
+
 
 
         String ID = (days[0].getDay())[0].getId();
@@ -130,8 +132,8 @@ public class MainActivity extends AppCompatActivity {
 
             ContentValues cityCv = new ContentValues();
             cityCv.put("name", cityString);
-            cityCv.put("_id",cityId);
-            cityId = db.insert("cities", null, cityCv);
+            cityCv.put("city_id",cityId);
+            db.insert("cities", null, cityCv);
 
             hasCity = true;
             ContentValues tempValues = new ContentValues();
@@ -142,10 +144,10 @@ public class MainActivity extends AppCompatActivity {
 
             for(int i=0; i < days.length; i++)
             {
-                int[] temps = new int[days[i].getDay().length];
+                long[] temps = new long[days[i].getDay().length];
                 double[] pres = new double[days[i].getDay().length];
                 double[] wind = new double[days[i].getDay().length];
-                int[] hum = new int[days[i].getDay().length];
+                long[] hum = new long[days[i].getDay().length];
                 String[] descr = new String[days[i].getDay().length];
                 long[] sec = new long[days[i].getDay().length];
 
@@ -232,10 +234,10 @@ public class MainActivity extends AppCompatActivity {
                 int count = 0;
 
                 Weather[] weathers = days[i].getDay();
-                int[] temps = new int[days[i].getDay().length];
+                long[] temps = new long[days[i].getDay().length];
                 double[] pres = new double[days[i].getDay().length];
                 double[] wind = new double[days[i].getDay().length];
-                int[] hum = new int[days[i].getDay().length];
+                long[] hum = new long[days[i].getDay().length];
                 String[] descr = new String[days[i].getDay().length];
                 long[] sec = new long[days[i].getDay().length];
 

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -51,6 +52,7 @@ public class Launcher extends AppCompatActivity {
                 url = "http://api.openweathermap.org/data/2.5/forecast?lat=" + location.getLatitude() +"&lon="+ location.getLongitude() +
                         "&appid=295f7bee433d8cf26fd64d9ab085726b";
                 intent.putExtra("url", url);
+                Log.e("button_pressed","Кнопка была нажата");
                 startActivity(intent);
             }
         });
