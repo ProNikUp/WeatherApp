@@ -15,7 +15,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -61,10 +60,9 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         final WeatherDay[] days = getWeather(response);
-
-                        dayTempSet(dbHelper.getCityWeather(null,dbHelper));
                         insertToDb(days);
-                        WeatherDay[] daysFour = Arrays.copyOfRange(days,1,days.length); // передаем только 4 дня,не включая сегодняшний
+                        dayTempSet(days[0]);
+                       WeatherDay[] daysFour = Arrays.copyOfRange(days,1,days.length); // передаем только 4 дня,не включая сегодняшний
                         final RecyclerView rvMain = (RecyclerView) findViewById(R.id.rvMain);
                         // Create adapter passing in the sample user data
 
@@ -77,8 +75,16 @@ public class MainActivity extends AppCompatActivity {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                 Toast.makeText(getApplicationContext(),
-                        "Упс, что-то пошло не так", Toast.LENGTH_LONG).show();
+/*                 Toast.makeText(getApplicationContext(),
+                        "Упс, что-то пошло не так", Toast.LENGTH_LONG).show();*/
+                    //dayTempSet(dbHelper.getCityWeather(null,dbHelper));
+                WeatherDay[] days = dbHelper.getCityWeathers(null,dbHelper);
+                dayTempSet(dbHelper.getCityWeather(null,dbHelper,-1));
+                //WeatherDay[] daysFour = Arrays.copyOfRange(days,1,days.length);
+                final RecyclerView rvMain = (RecyclerView) findViewById(R.id.rvMain);
+                final WeatherAdapter adapter = new WeatherAdapter(MainActivity.this, days);
+                rvMain.setLayoutManager(new LinearLayoutManager(MainActivity.this,LinearLayoutManager.HORIZONTAL,false));
+                rvMain.setAdapter(adapter);
             }
         });
         final RequestQueue queue = Volley.newRequestQueue(this);
@@ -92,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
 
         String cityString = (days[0].getDay())[0].getCityName();
 
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
 
         Cursor c = db.query("cities", null, null, null, null, null, null);
 
@@ -159,7 +165,7 @@ public class MainActivity extends AppCompatActivity {
                     wind[j] = (days[i].getDay())[j].getWindSpeed();
                     hum[j] = (days[i].getDay())[j].getHumidity();
                     descr[j] = (days[i].getDay())[j].getDescription();
-                    sec[j] = (days[i].getDay())[j].getDay();
+                    sec[j] = (days[i].getDay())[j].getUnix();
                 }
 
                 for(int j = 0; j < temps.length;j++) {
@@ -247,12 +253,12 @@ public class MainActivity extends AppCompatActivity {
                     wind[j] = (days[i].getDay())[j].getWindSpeed();
                     hum[j] = (days[i].getDay())[j].getHumidity();
                     descr[j] = (days[i].getDay())[j].getDescription();
-                    sec[j] = (days[i].getDay())[j].getDay();
+                    sec[j] = (days[i].getDay())[j].getUnix();
                 }
 
                 for(int j = 0; j < weathers.length;j++) {
                     SimpleDateFormat parseFormat = new SimpleDateFormat("H");
-                    Date date = new Date((weathers[j].getDay()-10800)*1000);
+                    Date date = new Date((weathers[j].getUnix()-10800)*1000);
                     String newDate = parseFormat.format(date);
 
                     tempObj.put(newDate + "temp", weathers[j].getTemp());
@@ -292,11 +298,11 @@ public class MainActivity extends AppCompatActivity {
             windValues.put("city_id",Long.valueOf(ID));
             descrValues.put("city_id",Long.valueOf(ID));
 
-            db.update("temp", tempValues, "_id = " + cityId,null);
-            db.update("hum", humValues, "_id = " + cityId,null);
-            db.update("pres", presValues, "_id = " + cityId,null);
-            db.update("wind", windValues, "_id = " + cityId,null);
-            db.update("descr", descrValues, "_id = " + cityId,null);
+            db.update("temp", tempValues, "city_id = " + cityId,null);
+            db.update("hum", humValues, "city_id = " + cityId,null);
+            db.update("pres", presValues, "city_id = " + cityId,null);
+            db.update("wind", windValues, "city_id = " + cityId,null);
+            db.update("descr", descrValues, "city_id = " + cityId,null);
 
         }
     }
@@ -375,36 +381,42 @@ public class MainActivity extends AppCompatActivity {
         final TextView tvCityName = (TextView)findViewById(R.id.tvEnter);
 
         final Date date = new Date();
-        SimpleDateFormat dateFormat;
-        dateFormat = new SimpleDateFormat("dd MMM yyyy H:mm");
+        final Date date1 = new Date((days.getDay()[0].getUnix() - 3*60*60) * 1000);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy H:mm");
+        SimpleDateFormat mask = new SimpleDateFormat("dd");
+        String qw = mask.format(date);
+        String wq = mask.format(date1);
 
-        tvCityName.setText((days.getDay())[0].getCityName());
-        tvDay.setText(dateFormat.format(date));
-        tvDayTemp.setText(String.valueOf((days.getDay())[0].getTemp()));
-        tvOsadki.setText((days.getDay())[0].getDescription());
-        tvWind.setText("wind speed: " + days.getDay()[0].getWindSpeed() + "m/s");
+        int timeZone = 0;
+        if((Integer.valueOf(mask.format(date)) - Integer.valueOf(mask.format(date1))) != 0) //new Date()
+            timeZone = (new Date().getHours())/3 - 1;
+            tvDay.setText(dateFormat.format(date));
+            tvDayTemp.setText(String.valueOf((days.getDay())[timeZone].getTemp()));
+            tvOsadki.setText((days.getDay())[timeZone].getDescription());
+            tvWind.setText("wind speed: " + days.getDay()[timeZone].getWindSpeed() + "m/s");
+            tvCityName.setText((days.getDay())[timeZone].getCityName());
+            Context context = getApplicationContext();
 
-        Context context = getApplicationContext();
+            Intent notificationIntent = new Intent(context, MainActivity.class);
+            PendingIntent contentIntent = PendingIntent.getActivity(context,
+                    0, notificationIntent,
+                    PendingIntent.FLAG_CANCEL_CURRENT);
 
-        Intent notificationIntent = new Intent(context, MainActivity.class);
-        PendingIntent contentIntent = PendingIntent.getActivity(context,
-                0, notificationIntent,
-                PendingIntent.FLAG_CANCEL_CURRENT);
+            Notification.Builder builder = new Notification.Builder(context);
 
-        Notification.Builder builder = new Notification.Builder(context);
+            builder.setContentIntent(contentIntent)
+                    .setSmallIcon(android.R.drawable.ic_media_next)
+                    .setContentTitle((days.getDay())[timeZone].getCityName())
+                    .setContentText(String.valueOf((days.getDay())[timeZone].getTemp())); // Текст уведомления
 
-        builder.setContentIntent(contentIntent)
-                .setSmallIcon(android.R.drawable.ic_media_next)
-                .setContentTitle((days.getDay())[0].getCityName())
-                .setContentText(String.valueOf((days.getDay())[0].getTemp())); // Текст уведомления
+            // Notification notification = builder.getNotification(); // до API 16
+            Notification notification = builder.build();
 
-        // Notification notification = builder.getNotification(); // до API 16
-        Notification notification = builder.build();
+            notificationManager = (NotificationManager) context
+                    .getSystemService(Context.NOTIFICATION_SERVICE);
+            notification.flags = notification.flags | Notification.FLAG_ONGOING_EVENT;
+            notificationManager.notify(100, notification);
 
-        notificationManager = (NotificationManager) context
-                .getSystemService(Context.NOTIFICATION_SERVICE);
-        notification.flags = notification.flags | Notification.FLAG_ONGOING_EVENT;
-        notificationManager.notify(100, notification);
     }//заполняем погоду для сегодняшнего дня
 
     @Override

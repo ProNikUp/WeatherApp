@@ -18,7 +18,15 @@ public class Weather{
     private String cityName;
     private String id;
 
-
+    public Weather(long tmp, long humidity, double windSpeed, double pressure, String description, String cityName , long day){
+        this.tmp = tmp;
+        this.humidity = humidity;
+        this.windSpeed = windSpeed;
+        this.pressure = pressure;
+        this.description = description;
+        this.cityName = cityName;
+        this.day = day;
+    }
     public void setTmp(long tmp) {
         this.tmp = tmp;
     }
@@ -51,7 +59,7 @@ public class Weather{
         this.cityName = cityName;
     }
 
-    long getDay() {
+    long getUnix() {
         return day;
     }
 
@@ -72,7 +80,7 @@ public class Weather{
     }
 
     Weather(double temp, String date, String description,
-                   double windSpeed, int humidity, int day, double pressure,String id,String cityName){
+                   double windSpeed, long humidity, long day, double pressure,String id,String cityName){
         this.tmp = ((int) Math.round(temp));
         this.date = date;
         this.description = description;
@@ -93,8 +101,9 @@ public class Weather{
     }
 
     String getDate() {
-        Date date1 = new Date((getDay()-86400)*1000);
+        Date date1 = new Date((getUnix())*1000);
         SimpleDateFormat dateFormat = new SimpleDateFormat("E");
+        String sq = dateFormat.format(date1);
         return dateFormat.format(date1);
     }
 
@@ -109,5 +118,4 @@ public class Weather{
     public void setId(String id) {
         this.id = id;
     }
-
 }

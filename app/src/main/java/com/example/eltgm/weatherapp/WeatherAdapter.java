@@ -62,12 +62,15 @@ public class WeatherAdapter extends
         TextView tvDescr = viewHolder.tvDescr;
         tvDescr.setText((weather.getDay())[3].getDescription());
         TextView tvTmp = viewHolder.tvTmp;
-        tvTmp.setText("n: " + String.valueOf((weather.getDay())[1].getTemp()) + "\n" + "d: " + String.valueOf((weather.getDay())[6].getTemp()));
+        tvTmp.setText("n: " + String.valueOf((weather.getDay())[1].getTemp()) + "\n"
+                + "d: " + String.valueOf((weather.getDay())[6].getTemp()));
 
-        tvTmp.setOnClickListener(new ItemClickListener(mContext,weather));
-        tvDate.setOnClickListener(new ItemClickListener(mContext,weather));
-        tvDescr.setOnClickListener(new ItemClickListener(mContext,weather));
+        tvTmp.setOnClickListener(new ItemClickListener(mContext,position + 1));
+        tvDate.setOnClickListener(new ItemClickListener(mContext,position + 1));
+        tvDescr.setOnClickListener(new ItemClickListener(mContext,position + 1));
+
     }//заполняем данными отображения, которые сохранили в viewholder
+
 
     @Override
     public int getItemCount() {

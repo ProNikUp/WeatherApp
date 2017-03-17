@@ -11,18 +11,19 @@ import static android.support.v4.content.ContextCompat.startActivity;
  * Created by eltgm on 29.01.17.
  */
 public class ItemClickListener implements View.OnClickListener {
-    WeatherDay weatherDay;
+    private final int dayNum;
     Context mContext;
 
-    public ItemClickListener(Context mContext, WeatherDay w) {
+    public ItemClickListener(Context mContext, int dayNum) {
         this.mContext = mContext;
-        this.weatherDay = w;
+        this.dayNum = dayNum;
     }
 
     @Override
     public void onClick(View v) {
         Intent intent = new Intent(mContext, Day.class);
-        //intent.putExtra("weatherDay", weatherDay);
+        intent.putExtra("dayNum",dayNum);
+
         Bundle bundle = null;
         startActivity(mContext,intent,bundle);
     }

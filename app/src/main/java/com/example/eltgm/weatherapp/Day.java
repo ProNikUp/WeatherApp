@@ -24,16 +24,17 @@ public class Day extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.day_layout);
-        WeatherDay weatherDay = getIntent().getExtras().getParcelable("weatherDay");
+        int dayNum = getIntent().getExtras().getInt("dayNum");
+        String id = getIntent().getExtras().getString("id");
+        DbHelper helper = new DbHelper(getApplicationContext());
+
+        WeatherDay weatherDay = helper.getCityWeather(null,helper,dayNum+1);
         long[] temp = new long[weatherDay.getDay().length];
         double[] pres = new double[weatherDay.getDay().length];
         double[] windspeed = new double[weatherDay.getDay().length];
         long[] humidity = new long[weatherDay.getDay().length];
 
         for (int i = 0; i < weatherDay.getDay().length; i++) {
-
-
-            int count = 0;
 
             for (int j = 0; j < temp.length; j++) {
                 temp[j] = (weatherDay.getDay())[j].getTemp();

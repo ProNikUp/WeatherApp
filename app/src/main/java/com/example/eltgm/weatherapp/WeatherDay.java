@@ -20,15 +20,13 @@ class WeatherDay {
         return day;
     }
 
-    WeatherDay(String tempJSON, String humJSON, String windJSON, String presJSON, String descrJSON){
-        int count = 0;
+    WeatherDay(String tempJSON, String humJSON, String windJSON, String presJSON, String descrJSON, String city_name){
         JSONParser parser = new JSONParser();
         Object JSONobj = null;
         Object JSONobj2 = null;
         Object JSONobj3 = null;
         Object JSONobj4 = null;
         Object JSONobj5 = null;
-
         try {
             JSONobj = parser.parse(tempJSON);
             JSONobj2 = parser.parse(humJSON);
@@ -44,27 +42,25 @@ class WeatherDay {
         JSONObject windObj = (JSONObject) JSONobj3;
         JSONObject presObj = (JSONObject) JSONobj4;
         JSONObject descrObj = (JSONObject) JSONobj5;
-        for(int i = 0; i < tempObj.size(); i++){
+
+            int count = 0;
             while (!tempObj.containsKey(count+"temp"))
                 count+=3;
-/*            if(!tempObj.containsKey(count+"temp")) {
 
-            }else{*/
+            int temp = 0;
+            Weather[] weath = new Weather[tempObj.size() - 1];
             while (tempObj.containsKey(count+"temp")){
                 long tmp = Long.parseLong(tempObj.get(count+"temp").toString());
                 long hum =  Long.parseLong(humObj.get(count+"hum").toString());
                 double wind = Double.parseDouble(windObj.get(count+"wind").toString());
                 double pres = Double.parseDouble(presObj.get(count+"pres").toString());
                 String descr = String.valueOf(descrObj.get(count+"descr"));
-                day[i].setTmp(tmp);
-                day[i].setHumidity(hum);
-                day[i].setWindSpeed(wind);
-                day[i].setPressure(pres);
-                day[i].setDescription(descr);
+                long day = Long.parseLong(tempObj.get("day").toString());
+                weath[temp] = new Weather(tmp,hum,wind,pres,descr,city_name,day);
+                temp++;
                 count+=3;
             }
-        }
-
+        this.day = weath;
     }
 
 }//класс,хранящий погоду на день
