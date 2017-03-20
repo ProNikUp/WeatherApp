@@ -7,7 +7,6 @@ import org.json.simple.parser.ParseException;
 class WeatherDay {
     private Weather[] day;
 
-
     WeatherDay(Weather[] days) {
         this.day = days;
     }

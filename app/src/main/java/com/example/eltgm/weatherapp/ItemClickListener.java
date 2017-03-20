@@ -7,21 +7,27 @@ import android.view.View;
 
 import static android.support.v4.content.ContextCompat.startActivity;
 
+/**
+ * Created by eltgm on 29.01.17.
+ */
 public class ItemClickListener implements View.OnClickListener {
     private final int dayNum;
     Context mContext;
+    String cityName;
 
-    public ItemClickListener(Context mContext, int dayNum) {
+    public ItemClickListener(Context mContext, int dayNum, String cityName) {
         this.mContext = mContext;
         this.dayNum = dayNum;
-    } //принимает номер дня, для перехода и контекст
+        this.cityName = cityName;
+    }
 
     @Override
     public void onClick(View v) {
         Intent intent = new Intent(mContext, Day.class);
         intent.putExtra("dayNum",dayNum);
+        intent.putExtra("cityName",cityName);
 
         Bundle bundle = null;
         startActivity(mContext,intent,bundle);
-    } // запускает новое актвити и передает номер дня, информацию о котором нужно вывести
-} //слушатель нажатий, применяется для перехода в полную информацию о дне
+    }
+}

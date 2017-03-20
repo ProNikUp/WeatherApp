@@ -20,18 +20,18 @@ public class Day extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.day_layout);
+
         int dayNum = getIntent().getExtras().getInt("dayNum");
-       // String id = getIntent().getExtras().getString("id");
+        String cityName = getIntent().getExtras().getString("cityName");
         DbHelper helper = new DbHelper(getApplicationContext());
 
-        WeatherDay weatherDay = helper.getCityWeather(null,helper,dayNum+1);
+        WeatherDay weatherDay = helper.getCityWeather(cityName,helper,dayNum+1);
         long[] temp = new long[weatherDay.getDay().length];
         double[] pres = new double[weatherDay.getDay().length];
         double[] windspeed = new double[weatherDay.getDay().length];
         long[] humidity = new long[weatherDay.getDay().length];
 
         for (int i = 0; i < weatherDay.getDay().length; i++) {
-
             for (int j = 0; j < temp.length; j++) {
                 temp[j] = (weatherDay.getDay())[j].getTemp();
                 pres[j] = (weatherDay.getDay())[j].getPressure();

@@ -2,16 +2,10 @@ package com.example.eltgm.weatherapp;
 
 import android.content.Context;
 import android.content.Intent;
-import android.location.Location;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.Toast;
-
-import io.nlopez.smartlocation.OnLocationUpdatedListener;
-import io.nlopez.smartlocation.SmartLocation;
 
 public class Launcher extends AppCompatActivity {
 
@@ -36,9 +30,10 @@ public class Launcher extends AppCompatActivity {
         url = "http://api.openweathermap.org/data/2.5/forecast?q=" + editText.getText()
                 + "&appid=295f7bee433d8cf26fd64d9ab085726b";
         intent.putExtra("url", url);
+        intent.putExtra("cityName", editText.getText().toString());
         startActivity(intent);
     } //входим в приложение с вводом города вручную
-
+/*
     //api.openweathermap.org/data/2.5/forecast?lat=35&lon=139&appid=295f7bee433d8cf26fd64d9ab085726b
     public void findPosition(View view) {
         SmartLocation.with(this).location().oneFix().start(new OnLocationUpdatedListener() {
@@ -56,5 +51,5 @@ public class Launcher extends AppCompatActivity {
         if(!SmartLocation.with(this).location().state().isAnyProviderAvailable()) {
             Toast.makeText(getApplicationContext(),"Geolocation is unavailable",Toast.LENGTH_LONG).show();
         }
-    } //входим в приложение с геолокацией
+    } //входим в приложение с геолокацией*/
 }//класс, запускающий лаунчер

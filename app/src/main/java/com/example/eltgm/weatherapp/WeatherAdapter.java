@@ -61,10 +61,9 @@ class WeatherAdapter extends
         tvTmp.setText("n: " + String.valueOf((weather.getDay())[1].getTemp()) + "\n"
                 + "d: " + String.valueOf((weather.getDay())[5].getTemp()));
 
-        tvTmp.setOnClickListener(new ItemClickListener(mContext,position + 1));
-        tvDate.setOnClickListener(new ItemClickListener(mContext,position + 1));
-        tvDescr.setOnClickListener(new ItemClickListener(mContext,position + 1));
-
+        tvTmp.setOnClickListener(new ItemClickListener(mContext,position + 1,weather.getDay()[0].getCityName()));
+        tvDate.setOnClickListener(new ItemClickListener(mContext,position + 1,weather.getDay()[0].getCityName()));
+        tvDescr.setOnClickListener(new ItemClickListener(mContext,position + 1,weather.getDay()[0].getCityName()));
     }//заполняем данными отображения, которые сохранили в viewholder
 
     @Override

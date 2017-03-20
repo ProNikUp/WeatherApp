@@ -25,12 +25,13 @@
         android:hint="@string/cityname" />
 
     <Button
-        android:text="@string/geo"
+        android:id="@+id/button2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/button2"
-        android:onClick="findPosition"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:onClick="findPosition"
+        android:text="@string/geo"
+        android:visibility="invisible" />
 
 </RelativeLayout>

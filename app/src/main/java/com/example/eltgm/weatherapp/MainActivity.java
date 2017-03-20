@@ -52,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
         dbHelper = new DbHelper(getApplicationContext());
 
         final String url = getIntent().getExtras().getString("url");
+        final String cityName = getIntent().getExtras().getString("cityName");
 
         final StringRequest stringRequest = new StringRequest(Request.Method.GET, url, //конфигурация сетевого запроса
                 new Response.Listener<String>() {
@@ -76,8 +77,8 @@ public class MainActivity extends AppCompatActivity {
 /*                 Toast.makeText(getApplicationContext(),
                         "Упс, что-то пошло не так", Toast.LENGTH_LONG).show();*/
                     //dayTempSet(dbHelper.getCityWeather(null,dbHelper));
-                WeatherDay[] days = dbHelper.getCityWeathers(null,dbHelper);
-                dayTempSet(dbHelper.getCityWeather(null,dbHelper,-1));
+                WeatherDay[] days = dbHelper.getCityWeathers(cityName,dbHelper);
+                dayTempSet(dbHelper.getCityWeather(cityName,dbHelper,-1));
                 //WeatherDay[] daysFour = Arrays.copyOfRange(days,1,days.length);
                 final RecyclerView rvMain = (RecyclerView) findViewById(R.id.rvMain);
                 final WeatherAdapter adapter = new WeatherAdapter(MainActivity.this, days);
@@ -91,9 +92,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void insertToDb(WeatherDay[] days) {
-
-
-
         String cityString = (days[0].getDay())[0].getCityName();
 
         SQLiteDatabase db = dbHelper.getReadableDatabase();
@@ -209,7 +207,6 @@ public class MainActivity extends AppCompatActivity {
             db.insert("pres",null,presValues);
             db.insert("wind",null,windValues);
             db.insert("descr",null,descrValues);
-
         } else {
 
             int k = 1;
@@ -218,18 +215,14 @@ public class MainActivity extends AppCompatActivity {
             JSONObject presObj = new JSONObject();
             JSONObject windObj = new JSONObject();
             JSONObject descrObj = new JSONObject();
-            //JSONObject secObj = new JSONObject();
-
 
             ContentValues tempValues = new ContentValues();
             ContentValues windValues = new ContentValues();
             ContentValues presValues = new ContentValues();
             ContentValues humValues = new ContentValues();
             ContentValues descrValues = new ContentValues();
-            //ContentValues sevValues = new ContentValues();
 
             for (WeatherDay day : days) {
-                int count = 0;
 
                 Weather[] weathers = day.getDay();
                 long[] temps = new long[day.getDay().length];
@@ -279,7 +272,6 @@ public class MainActivity extends AppCompatActivity {
 
                 String jsonDescr = descrObj.toString();
                 descrValues.put("descr" + (k), jsonDescr);
-
 
                 k++;
             }
