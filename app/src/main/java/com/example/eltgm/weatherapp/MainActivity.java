@@ -31,6 +31,7 @@ import org.json.simple.parser.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -48,12 +49,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
         dbHelper = new DbHelper(getApplicationContext());
 
         final String url = getIntent().getExtras().getString("url");
-
-
 
         final StringRequest stringRequest = new StringRequest(Request.Method.GET, url, //конфигурация сетевого запроса
                 new Response.Listener<String>() {
@@ -123,8 +121,6 @@ public class MainActivity extends AppCompatActivity {
             c.close();
             }
 
-
-
         String ID = (days[0].getDay())[0].getId();
 
         if(!hasCity) {
@@ -134,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
             JSONObject presObj = new JSONObject();
             JSONObject windObj = new JSONObject();
             JSONObject descrObj = new JSONObject();
-            JSONObject dayObj = new JSONObject();
+            //JSONObject dayObj = new JSONObject();
 
             ContentValues cityCv = new ContentValues();
             cityCv.put("name", cityString);
@@ -148,29 +144,28 @@ public class MainActivity extends AppCompatActivity {
             ContentValues humValues = new ContentValues();
             ContentValues descrValues = new ContentValues();
 
-            for(int i=0; i < days.length; i++)
-            {
-                long[] temps = new long[days[i].getDay().length];
-                double[] pres = new double[days[i].getDay().length];
-                double[] wind = new double[days[i].getDay().length];
-                long[] hum = new long[days[i].getDay().length];
-                String[] descr = new String[days[i].getDay().length];
-                long[] sec = new long[days[i].getDay().length];
+            for (WeatherDay day : days) {
+                long[] temps = new long[day.getDay().length];
+                double[] pres = new double[day.getDay().length];
+                double[] wind = new double[day.getDay().length];
+                long[] hum = new long[day.getDay().length];
+                String[] descr = new String[day.getDay().length];
+                long[] sec = new long[day.getDay().length];
 
                 int count = 0;
 
-                for(int j = 0; j < temps.length; j++){
-                    temps[j] = (days[i].getDay())[j].getTemp();
-                    pres[j] = (days[i].getDay())[j].getPressure();
-                    wind[j] = (days[i].getDay())[j].getWindSpeed();
-                    hum[j] = (days[i].getDay())[j].getHumidity();
-                    descr[j] = (days[i].getDay())[j].getDescription();
-                    sec[j] = (days[i].getDay())[j].getUnix();
+                for (int j = 0; j < temps.length; j++) {
+                    temps[j] = (day.getDay())[j].getTemp();
+                    pres[j] = (day.getDay())[j].getPressure();
+                    wind[j] = (day.getDay())[j].getWindSpeed();
+                    hum[j] = (day.getDay())[j].getHumidity();
+                    descr[j] = (day.getDay())[j].getDescription();
+                    sec[j] = (day.getDay())[j].getUnix();
                 }
 
-                for(int j = 0; j < temps.length;j++) {
-                    SimpleDateFormat parseFormat = new SimpleDateFormat("H");
-                    Date date = new Date((sec[j]-10800)*1000);
+                for (int j = 0; j < temps.length; j++) {
+                    SimpleDateFormat parseFormat = new SimpleDateFormat("H", Locale.ROOT);
+                    Date date = new Date((sec[j] - 10800) * 1000);
                     String newDate = parseFormat.format(date);
 
                     tempObj.put(newDate + "temp", temps[j]);
@@ -178,30 +173,28 @@ public class MainActivity extends AppCompatActivity {
                     presObj.put(newDate + "pres", pres[j]);
                     windObj.put(newDate + "wind", wind[j]);
                     descrObj.put(newDate + "descr", descr[j]);
-
-                    // TODO Перевести массив в JSON строку!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                 }
 
-                tempObj.put("day",sec[0]);
-                humObj.put("day",sec[0]);
-                presObj.put("day",sec[0]);
-                windObj.put("day",sec[0]);
-                descrObj.put("day",sec[0]);
+                tempObj.put("day", sec[0]);
+                humObj.put("day", sec[0]);
+                presObj.put("day", sec[0]);
+                windObj.put("day", sec[0]);
+                descrObj.put("day", sec[0]);
 
                 String jsonTemp = tempObj.toString();
-                tempValues.put("temp" + (k),jsonTemp);
+                tempValues.put("temp" + (k), jsonTemp);
 
                 String jsonWind = windObj.toString();
-                windValues.put("wind" + (k),jsonWind);
+                windValues.put("wind" + (k), jsonWind);
 
                 String jsonPres = presObj.toString();
-                presValues.put("pres" + (k),jsonPres);
+                presValues.put("pres" + (k), jsonPres);
 
                 String jsonHum = humObj.toString();
-                humValues.put("hum" + (k),jsonHum);
+                humValues.put("hum" + (k), jsonHum);
 
                 String jsonDescr = descrObj.toString();
-                descrValues.put("descr" + (k),jsonDescr);
+                descrValues.put("descr" + (k), jsonDescr);
                 k++;
             }
 
@@ -225,7 +218,7 @@ public class MainActivity extends AppCompatActivity {
             JSONObject presObj = new JSONObject();
             JSONObject windObj = new JSONObject();
             JSONObject descrObj = new JSONObject();
-            JSONObject secObj = new JSONObject();
+            //JSONObject secObj = new JSONObject();
 
 
             ContentValues tempValues = new ContentValues();
@@ -233,60 +226,59 @@ public class MainActivity extends AppCompatActivity {
             ContentValues presValues = new ContentValues();
             ContentValues humValues = new ContentValues();
             ContentValues descrValues = new ContentValues();
-            ContentValues sevValues = new ContentValues();
+            //ContentValues sevValues = new ContentValues();
 
-            for(int i=0; i < days.length; i++)
-            {
+            for (WeatherDay day : days) {
                 int count = 0;
 
-                Weather[] weathers = days[i].getDay();
-                long[] temps = new long[days[i].getDay().length];
-                double[] pres = new double[days[i].getDay().length];
-                double[] wind = new double[days[i].getDay().length];
-                long[] hum = new long[days[i].getDay().length];
-                String[] descr = new String[days[i].getDay().length];
-                long[] sec = new long[days[i].getDay().length];
+                Weather[] weathers = day.getDay();
+                long[] temps = new long[day.getDay().length];
+                double[] pres = new double[day.getDay().length];
+                double[] wind = new double[day.getDay().length];
+                long[] hum = new long[day.getDay().length];
+                String[] descr = new String[day.getDay().length];
+                long[] sec = new long[day.getDay().length];
 
-                for(int j = 0; j < temps.length; j++){
-                    temps[j] = (days[i].getDay())[j].getTemp();
-                    pres[j] = (days[i].getDay())[j].getPressure();
-                    wind[j] = (days[i].getDay())[j].getWindSpeed();
-                    hum[j] = (days[i].getDay())[j].getHumidity();
-                    descr[j] = (days[i].getDay())[j].getDescription();
-                    sec[j] = (days[i].getDay())[j].getUnix();
+                for (int j = 0; j < temps.length; j++) {
+                    temps[j] = (day.getDay())[j].getTemp();
+                    pres[j] = (day.getDay())[j].getPressure();
+                    wind[j] = (day.getDay())[j].getWindSpeed();
+                    hum[j] = (day.getDay())[j].getHumidity();
+                    descr[j] = (day.getDay())[j].getDescription();
+                    sec[j] = (day.getDay())[j].getUnix();
                 }
 
-                for(int j = 0; j < weathers.length;j++) {
-                    SimpleDateFormat parseFormat = new SimpleDateFormat("H");
-                    Date date = new Date((weathers[j].getUnix()-10800)*1000);
+                for (Weather weather : weathers) {
+                    SimpleDateFormat parseFormat = new SimpleDateFormat("H", Locale.ROOT);
+                    Date date = new Date((weather.getUnix() - 10800) * 1000);
                     String newDate = parseFormat.format(date);
 
-                    tempObj.put(newDate + "temp", weathers[j].getTemp());
-                    humObj.put(newDate + "hum", weathers[j].getHumidity());
-                    presObj.put(newDate + "pres", weathers[j].getPressure());
-                    windObj.put(newDate + "wind", weathers[j].getWindSpeed());
-                    descrObj.put(newDate + "descr", weathers[j].getDescription());
+                    tempObj.put(newDate + "temp", weather.getTemp());
+                    humObj.put(newDate + "hum", weather.getHumidity());
+                    presObj.put(newDate + "pres", weather.getPressure());
+                    windObj.put(newDate + "wind", weather.getWindSpeed());
+                    descrObj.put(newDate + "descr", weather.getDescription());
                 }
-                tempObj.put("day",sec[0]);
-                humObj.put("day",sec[0]);
-                presObj.put("day",sec[0]);
-                windObj.put("day",sec[0]);
-                descrObj.put("day",sec[0]);
+                tempObj.put("day", sec[0]);
+                humObj.put("day", sec[0]);
+                presObj.put("day", sec[0]);
+                windObj.put("day", sec[0]);
+                descrObj.put("day", sec[0]);
 
                 String jsonTemp = tempObj.toString();
-                tempValues.put("temp" + (k),jsonTemp);
+                tempValues.put("temp" + (k), jsonTemp);
 
                 String jsonWind = windObj.toString();
-                windValues.put("wind" + (k),jsonWind);
+                windValues.put("wind" + (k), jsonWind);
 
                 String jsonPres = presObj.toString();
-                presValues.put("pres" + (k),jsonPres);
+                presValues.put("pres" + (k), jsonPres);
 
                 String jsonHum = humObj.toString();
-                humValues.put("hum" + (k),jsonHum);
+                humValues.put("hum" + (k), jsonHum);
 
                 String jsonDescr = descrObj.toString();
-                descrValues.put("descr" + (k),jsonDescr);
+                descrValues.put("descr" + (k), jsonDescr);
 
 
                 k++;
@@ -305,8 +297,7 @@ public class MainActivity extends AppCompatActivity {
             db.update("descr", descrValues, "city_id = " + cityId,null);
 
         }
-    }
-
+    } //создание/обновление записи в бд с городом
 
     public WeatherDay[] getWeather(String response){
 
@@ -370,8 +361,6 @@ public class MainActivity extends AppCompatActivity {
         return weatherDays;
     }//создаем массив погод на 5 дня
 
-
-
     @SuppressLint("SimpleDateFormat")
     private void dayTempSet(WeatherDay days){
         final TextView tvDay = (TextView)findViewById(R.id.tvDay);
@@ -384,8 +373,6 @@ public class MainActivity extends AppCompatActivity {
         final Date date1 = new Date((days.getDay()[0].getUnix() - 3*60*60) * 1000);
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy H:mm");
         SimpleDateFormat mask = new SimpleDateFormat("dd");
-        String qw = mask.format(date);
-        String wq = mask.format(date1);
 
         int timeZone = 0;
         if((Integer.valueOf(mask.format(date)) - Integer.valueOf(mask.format(date1))) != 0) //new Date()

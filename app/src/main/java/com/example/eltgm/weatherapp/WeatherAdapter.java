@@ -7,19 +7,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-public class WeatherAdapter extends
+class WeatherAdapter extends
         RecyclerView.Adapter<WeatherAdapter.ViewHolder>{
 
-
-    public static class ViewHolder extends RecyclerView.ViewHolder{
+     static class ViewHolder extends RecyclerView.ViewHolder{
         // Your holder should contain a member variable
         // for any view that will be set as you render a row
-        public TextView tvTmp;
-        public TextView tvTime;
-        public TextView tvDescr;
+        TextView tvTmp, tvTime, tvDescr;
         // We also create a constructor that accepts the entire item row
         // and does the view lookups to find each subview
-        public ViewHolder(View itemView) {
+        ViewHolder(View itemView) {
             // Stores the itemView in a public final member variable that can be used
             // to access the context from any ViewHolder instance.
             super(itemView);
@@ -33,7 +30,7 @@ public class WeatherAdapter extends
     private WeatherDay[] mWeather;
     private Context mContext;
 
-    public WeatherAdapter(Context context, WeatherDay[] weathers) {
+     WeatherAdapter(Context context, WeatherDay[] weathers) {
         mWeather = weathers;
         mContext = context;
     }
@@ -47,8 +44,7 @@ public class WeatherAdapter extends
         View contactView = inflater.inflate(R.layout.item, parent, false);
 
         // Return a new holder instance
-        ViewHolder viewHolder = new ViewHolder(contactView);
-        return viewHolder;
+        return new ViewHolder(contactView);
     }//создаем объект viewholder и заполняем его отображениями из item
 
     @Override
@@ -63,14 +59,13 @@ public class WeatherAdapter extends
         tvDescr.setText((weather.getDay())[3].getDescription());
         TextView tvTmp = viewHolder.tvTmp;
         tvTmp.setText("n: " + String.valueOf((weather.getDay())[1].getTemp()) + "\n"
-                + "d: " + String.valueOf((weather.getDay())[6].getTemp()));
+                + "d: " + String.valueOf((weather.getDay())[5].getTemp()));
 
         tvTmp.setOnClickListener(new ItemClickListener(mContext,position + 1));
         tvDate.setOnClickListener(new ItemClickListener(mContext,position + 1));
         tvDescr.setOnClickListener(new ItemClickListener(mContext,position + 1));
 
     }//заполняем данными отображения, которые сохранили в viewholder
-
 
     @Override
     public int getItemCount() {

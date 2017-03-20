@@ -13,16 +13,12 @@ import android.widget.Toast;
 import io.nlopez.smartlocation.OnLocationUpdatedListener;
 import io.nlopez.smartlocation.SmartLocation;
 
-/**
- * Created by eltgm on 17.01.17.
- */
-
 public class Launcher extends AppCompatActivity {
 
     private String url;
     private EditText editText;
     Context mContext;
-    //"http://api.openweathermap.org/data/2.5/forecast?q=Moscow&appid=295f7bee433d8cf26fd64d9ab085726b"
+
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -33,6 +29,7 @@ public class Launcher extends AppCompatActivity {
         mContext = getApplicationContext();
     }
 
+    //"http://api.openweathermap.org/data/2.5/forecast?q=Moscow&appid=295f7bee433d8cf26fd64d9ab085726b"
     public void enterWeather(View view) {
         url = " ";
         Intent intent = new Intent(Launcher.this,MainActivity.class);
@@ -60,4 +57,4 @@ public class Launcher extends AppCompatActivity {
             Toast.makeText(getApplicationContext(),"Geolocation is unavailable",Toast.LENGTH_LONG).show();
         }
     } //входим в приложение с геолокацией
-}
+}//класс, запускающий лаунчер

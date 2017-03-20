@@ -8,4 +8,6 @@
     <string name="launcher">Launcher</string>
     <string name="dayWeather">4 Day Weather</string>
     <string name="action_setting">Настройка</string>
+    <string name="cityname">Введите название города</string>
+    <string name="geo">Определить местоположение</string>
 </resources>

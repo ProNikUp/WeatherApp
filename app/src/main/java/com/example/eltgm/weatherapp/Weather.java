@@ -2,12 +2,9 @@ package com.example.eltgm.weatherapp;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
-/**
- * Created by eltgm on 20.12.2016.
- */
-
-public class Weather{
+class Weather{
     private long tmp;
     String date;
     private double pressure;
@@ -18,7 +15,7 @@ public class Weather{
     private String cityName;
     private String id;
 
-    public Weather(long tmp, long humidity, double windSpeed, double pressure, String description, String cityName , long day){
+    Weather(long tmp, long humidity, double windSpeed, double pressure, String description, String cityName , long day){
         this.tmp = tmp;
         this.humidity = humidity;
         this.windSpeed = windSpeed;
@@ -26,37 +23,6 @@ public class Weather{
         this.description = description;
         this.cityName = cityName;
         this.day = day;
-    }
-    public void setTmp(long tmp) {
-        this.tmp = tmp;
-    }
-
-    public void setDate(String date) {
-        this.date = date;
-    }
-
-    public void setPressure(double pressure) {
-        this.pressure = pressure;
-    }
-
-    public void setHumidity(long humidity) {
-        this.humidity = humidity;
-    }
-
-    public void setWindSpeed(double windSpeed) {
-        this.windSpeed = windSpeed;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public void setDay(long day) {
-        this.day = day;
-    }
-
-    public void setCityName(String cityName) {
-        this.cityName = cityName;
     }
 
     long getUnix() {
@@ -92,22 +58,17 @@ public class Weather{
         this.cityName = cityName;
     }
 
-    public Weather(String json){
-
-    }
-
     long getTemp() {
         return tmp;
     }
 
     String getDate() {
         Date date1 = new Date((getUnix())*1000);
-        SimpleDateFormat dateFormat = new SimpleDateFormat("E");
-        String sq = dateFormat.format(date1);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("E", Locale.ROOT);
         return dateFormat.format(date1);
     }
 
-    public String getCityName() {
+    String getCityName() {
         return cityName;
     }
 

@@ -4,19 +4,15 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-/**
- * Created by eltgm on 19.01.17.
- */
-
 class WeatherDay {
-    Weather[] day;
+    private Weather[] day;
 
 
     WeatherDay(Weather[] days) {
         this.day = days;
     }
 
-    public Weather[] getDay() {
+    Weather[] getDay() {
         return day;
     }
 

@@ -11,10 +11,7 @@ import org.json.simple.parser.ParseException;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
-/**
- * Created by eltgm on 14.02.17.
- */
+import java.util.Locale;
 
 public class DbHelper extends SQLiteOpenHelper {
 
@@ -22,7 +19,7 @@ public class DbHelper extends SQLiteOpenHelper {
         super(context,"myDb",null,1);
     }//создание базы данных
 
-    public WeatherDay getCityWeather(String cityId, DbHelper helper, int day)
+    public WeatherDay getCityWeather(String cityId, DbHelper helper, int day) //возвращает один день с погодой
     {
         String temp1Json;
         String hum1Json;
@@ -35,7 +32,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
         // SELECT * FROM temp WHERE
 
-        Cursor c = db.query("cities", null, null, null, null, null, null);
+        Cursor c = db.query("cities", null, cityId, null, null, null, null); //3параметр cityid
 
         if(c.moveToFirst())
         {
@@ -64,13 +61,11 @@ public class DbHelper extends SQLiteOpenHelper {
                    JSONObject tempObj = (JSONObject) JSONobj;
                    final Date date = new Date();
 
-                   SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy H:mm");
-                   SimpleDateFormat mask = new SimpleDateFormat("dd");
+                   //SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy H:mm", Locale.ROOT);
+                   SimpleDateFormat mask = new SimpleDateFormat("dd", Locale.ROOT);
 
                    long dayValue = ((long)tempObj.get("day") - 3*60*60)*1000;
                    final Date date1 = new Date(dayValue) ;
-                   String qw = mask.format(date);
-                   String wq = mask.format(date1);
                    long past = 1;
 
                    if(day == -1)
@@ -84,24 +79,6 @@ public class DbHelper extends SQLiteOpenHelper {
                            wind1Json = wind.getString(wind.getColumnIndex("wind" + past));
                            descr1Json = descr.getString(descr.getColumnIndex("descr" + past));
                            return new WeatherDay(temp1Json, hum1Json, wind1Json, pres1Json, descr1Json,String.valueOf(c.getString(c.getColumnIndex("name"))));
-                           // int past = (new Date().getSeconds() - dayValue)/3600= кол-во прошедших дней
-                           // "temp" + past + 1
-                          /* temp1Json = temps.getString(temps.getColumnIndex("temp1"));
-                           hum1Json = hum.getString(hum.getColumnIndex("hum1"));
-                           pres1Json = pres.getString(pres.getColumnIndex("pres1"));
-                           wind1Json = wind.getString(wind.getColumnIndex("wind1"));
-                           descr1Json = descr.getString(descr.getColumnIndex("descr1"));
-                           return new WeatherDay(temp1Json, hum1Json, wind1Json, pres1Json, descr1Json,String.valueOf(c.getString(c.getColumnIndex("name"))));*/
-                       /*}else{
-                           long past = Integer.valueOf(mask.format(date)) - Integer.valueOf(mask.format(date1)) + 1;
-
-                           temp1Json = temps.getString(temps.getColumnIndex("temp" + past));
-                           hum1Json = hum.getString(hum.getColumnIndex("hum" + past));
-                           pres1Json = pres.getString(pres.getColumnIndex("pres" + past));
-                           wind1Json = wind.getString(wind.getColumnIndex("wind" + past));
-                           descr1Json = descr.getString(descr.getColumnIndex("descr" + past));
-                           return new WeatherDay(temp1Json, hum1Json, wind1Json, pres1Json, descr1Json,String.valueOf(c.getString(c.getColumnIndex("name"))));
-                       }*/
                    } else {
                        temp1Json = temps.getString(temps.getColumnIndex("temp" + day));
                        hum1Json = hum.getString(hum.getColumnIndex("hum" + day));
@@ -161,7 +138,7 @@ public class DbHelper extends SQLiteOpenHelper {
                     JSONObject tempOb = (JSONObject) obj;
                     final Date d = new Date();
 
-                    SimpleDateFormat mask1 = new SimpleDateFormat("dd");
+                    SimpleDateFormat mask1 = new SimpleDateFormat("dd",Locale.ROOT);
 
                     long day = ((long)tempOb.get("day") - 3*60*60)*1000;
                     final Date d1 = new Date(day) ;
@@ -185,14 +162,12 @@ public class DbHelper extends SQLiteOpenHelper {
                         JSONObject tempObj = (JSONObject) JSONobj;
                         final Date date = new Date();
 
-                        SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy H:mm");
-                        SimpleDateFormat mask = new SimpleDateFormat("dd");
+                        //SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy H:mm", Locale.ROOT);
+                        SimpleDateFormat mask = new SimpleDateFormat("dd", Locale.ROOT);
 
                         long dayValue = ((long)tempObj.get("day") - 3*60*60)*1000;
                         final Date date1 = new Date(dayValue) ;
 
-                        int one = Integer.parseInt(mask.format(date));
-                        int two = Integer.parseInt(mask.format(date1));
                         if((Integer.valueOf(mask.format(date1)) - Integer.valueOf(mask.format(date))) > 0 ) {
                             //past = stamp + 1;
                             // int past = (new Date().getSeconds() - dayValue)/3600= кол-во прошедших дней
@@ -229,8 +204,7 @@ public class DbHelper extends SQLiteOpenHelper {
         } else
             c.close();
         return null;
-    }
-
+    } //метод, создающий массив дней с погодой
 
     @Override
     public void onCreate(SQLiteDatabase db) {

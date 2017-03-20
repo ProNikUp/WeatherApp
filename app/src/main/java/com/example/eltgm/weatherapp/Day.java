@@ -14,10 +14,6 @@ import com.github.mikephil.charting.data.LineDataSet;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by eltgm on 24.01.17.
- */
-
 public class Day extends AppCompatActivity {
 
     @Override
@@ -25,7 +21,7 @@ public class Day extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.day_layout);
         int dayNum = getIntent().getExtras().getInt("dayNum");
-        String id = getIntent().getExtras().getString("id");
+       // String id = getIntent().getExtras().getString("id");
         DbHelper helper = new DbHelper(getApplicationContext());
 
         WeatherDay weatherDay = helper.getCityWeather(null,helper,dayNum+1);
@@ -56,7 +52,7 @@ public class Day extends AppCompatActivity {
     }
 
     public void createChart(long[] dataMas, String descr, LineChart lineChart){
-        List<Entry> entries = new ArrayList<Entry>(); //входные данные для графика
+        List<Entry> entries = new ArrayList<>(); //входные данные для графика
         int count = 0;
         for(long data:dataMas) {
             entries.add(new Entry(count, data)); //добавляем точку  на график (по x - временной отрезок,
@@ -91,7 +87,7 @@ public class Day extends AppCompatActivity {
     }//создание графиков с целыми данными
 
     public void createChart(double[] dataMas, String descr, LineChart lineChart){
-        List<Entry> entries = new ArrayList<Entry>(); //входные данные для графика
+        List<Entry> entries = new ArrayList<>(); //входные данные для графика
         int count = 0;
         for(double data:dataMas) {
             entries.add(new Entry(count, ((float) data))); //добавляем точку  на график (по x - временной отрезок,
