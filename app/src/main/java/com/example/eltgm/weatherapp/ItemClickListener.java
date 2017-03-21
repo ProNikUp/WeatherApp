@@ -7,9 +7,6 @@ import android.view.View;
 
 import static android.support.v4.content.ContextCompat.startActivity;
 
-/**
- * Created by eltgm on 29.01.17.
- */
 public class ItemClickListener implements View.OnClickListener {
     private final int dayNum;
     Context mContext;

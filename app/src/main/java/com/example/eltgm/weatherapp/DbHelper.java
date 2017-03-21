@@ -56,7 +56,6 @@ public class DbHelper extends SQLiteOpenHelper {
                 JSONObject tempObj = (JSONObject) JSONobj;
                 final Date date = new Date();
 
-                //SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy H:mm", Locale.ROOT);
                 SimpleDateFormat mask = new SimpleDateFormat("dd", Locale.ROOT);
 
                 long dayValue = ((long) tempObj.get("day") - 3 * 60 * 60) * 1000;
@@ -185,6 +184,7 @@ public class DbHelper extends SQLiteOpenHelper {
                 "temp3 text," +
                 "temp4 text," +
                 "temp5 text);");
+
         db.execSQL("create table hum (" +
                 "_id integer primary key autoincrement," +
                 "city_id integer," +
@@ -193,6 +193,7 @@ public class DbHelper extends SQLiteOpenHelper {
                 "hum3 text," +
                 "hum4 text," +
                 "hum5 text);");
+
         db.execSQL("create table pres (" +
                 "_id integer primary key autoincrement," +
                 "city_id integer," +
@@ -201,6 +202,7 @@ public class DbHelper extends SQLiteOpenHelper {
                 "pres3 text," +
                 "pres4 text," +
                 "pres5 text);");
+
         db.execSQL("create table wind (" +
                 "_id integer primary key autoincrement," +
                 "city_id integer," +
@@ -209,6 +211,7 @@ public class DbHelper extends SQLiteOpenHelper {
                 "wind3 text," +
                 "wind4 text," +
                 "wind5 text);");
+
         db.execSQL("create table descr (" +
                 "_id integer primary key autoincrement," +
                 "city_id integer," +

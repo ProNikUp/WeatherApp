@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return super.onCreateOptionsMenu(menu);
     } //создание меню
-    //TODO меню
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,12 +74,9 @@ public class MainActivity extends AppCompatActivity {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-/*                 Toast.makeText(getApplicationContext(),
-                        "Упс, что-то пошло не так", Toast.LENGTH_LONG).show();*/
-                    //dayTempSet(dbHelper.getCityWeather(null,dbHelper));
                 WeatherDay[] days = dbHelper.getCityWeathers(cityName,dbHelper);
                 dayTempSet(dbHelper.getCityWeather(cityName,dbHelper,-1));
-                //WeatherDay[] daysFour = Arrays.copyOfRange(days,1,days.length);
+
                 final RecyclerView rvMain = (RecyclerView) findViewById(R.id.rvMain);
                 final WeatherAdapter adapter = new WeatherAdapter(MainActivity.this, days);
                 rvMain.setLayoutManager(new LinearLayoutManager(MainActivity.this,LinearLayoutManager.HORIZONTAL,false));
@@ -117,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
                 } while (c.moveToNext());
             } else {
             c.close();
-            }
+        }
 
         String ID = (days[0].getDay())[0].getId();
 
@@ -128,7 +125,6 @@ public class MainActivity extends AppCompatActivity {
             JSONObject presObj = new JSONObject();
             JSONObject windObj = new JSONObject();
             JSONObject descrObj = new JSONObject();
-            //JSONObject dayObj = new JSONObject();
 
             ContentValues cityCv = new ContentValues();
             cityCv.put("name", cityString);
@@ -149,8 +145,6 @@ public class MainActivity extends AppCompatActivity {
                 long[] hum = new long[day.getDay().length];
                 String[] descr = new String[day.getDay().length];
                 long[] sec = new long[day.getDay().length];
-
-                int count = 0;
 
                 for (int j = 0; j < temps.length; j++) {
                     temps[j] = (day.getDay())[j].getTemp();
@@ -208,7 +202,6 @@ public class MainActivity extends AppCompatActivity {
             db.insert("wind",null,windValues);
             db.insert("descr",null,descrValues);
         } else {
-
             int k = 1;
             JSONObject tempObj = new JSONObject();
             JSONObject humObj = new JSONObject();
@@ -292,7 +285,6 @@ public class MainActivity extends AppCompatActivity {
     } //создание/обновление записи в бд с городом
 
     public WeatherDay[] getWeather(String response){
-
         JSONParser parser = new JSONParser();
         Object JSONobj = null;
         Weather[] tempDay;
@@ -395,7 +387,6 @@ public class MainActivity extends AppCompatActivity {
                     .getSystemService(Context.NOTIFICATION_SERVICE);
             notification.flags = notification.flags | Notification.FLAG_ONGOING_EVENT;
             notificationManager.notify(100, notification);
-
     }//заполняем погоду для сегодняшнего дня
 
     @Override

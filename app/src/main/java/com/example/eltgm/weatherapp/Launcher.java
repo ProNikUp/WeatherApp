@@ -9,7 +9,6 @@ import android.widget.EditText;
 
 public class Launcher extends AppCompatActivity {
 
-    private String url;
     private EditText editText;
     Context mContext;
 
@@ -25,9 +24,8 @@ public class Launcher extends AppCompatActivity {
 
     //"http://api.openweathermap.org/data/2.5/forecast?q=Moscow&appid=295f7bee433d8cf26fd64d9ab085726b"
     public void enterWeather(View view) {
-        url = " ";
         Intent intent = new Intent(Launcher.this,MainActivity.class);
-        url = "http://api.openweathermap.org/data/2.5/forecast?q=" + editText.getText()
+        String url = "http://api.openweathermap.org/data/2.5/forecast?q=" + editText.getText()
                 + "&appid=295f7bee433d8cf26fd64d9ab085726b";
         intent.putExtra("url", url);
         intent.putExtra("cityName", editText.getText().toString());

@@ -57,5 +57,4 @@ class WeatherDay {
             }
         this.day = weath;
     }
-
 }//класс,хранящий погоду на день
