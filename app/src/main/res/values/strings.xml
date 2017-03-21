@@ -10,4 +10,6 @@
     <string name="action_setting">Настройка</string>
     <string name="cityname">Введите название города</string>
     <string name="geo">Определить местоположение</string>
+    <string name="history">История</string>
+    <string name="about">О программе</string>
 </resources>
