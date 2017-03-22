@@ -19,6 +19,8 @@ class HistoryItemListener implements View.OnClickListener {
     public void onClick(View v) {
         Intent intent = new Intent(mContext,MainActivity.class);
         intent.putExtra("cityName",cityName);
+        intent.putExtra("url","http://api.openweathermap.org/data/2.5/forecast?q=" + cityName
+                + "&appid=295f7bee433d8cf26fd64d9ab085726b");
 
         Bundle bundle = null;
         startActivity(mContext,intent,bundle);
