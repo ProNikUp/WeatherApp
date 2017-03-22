@@ -12,4 +12,5 @@
     <string name="geo">Определить местоположение</string>
     <string name="history">История</string>
     <string name="about">О программе</string>
+    <string name="city_name">City Name:</string>
 </resources>

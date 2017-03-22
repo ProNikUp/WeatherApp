@@ -7,10 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-/**
- * Created by eltgm on 21.03.17.
- */
-
 public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHolder> {
 
     String[] cityNames;
@@ -39,9 +35,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
 
         View cityName = inflater.inflate(R.layout.historyitem, parent, false);
 
-        ViewHolder viewHolder = new ViewHolder(cityName);
-
-        return viewHolder;
+        return new ViewHolder(cityName);
     }
 
     @Override

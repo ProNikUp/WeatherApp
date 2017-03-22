@@ -18,7 +18,7 @@ public class History extends AppCompatActivity{
         SQLiteDatabase database = dbHelper.getReadableDatabase();
         Cursor c = database.query("cities", new String[]{"name"}, null, null, null, null, null);
 
-        String[] cityName = new String[2];
+        String[] cityName = new String[c.getCount()];
         int i = 0;
         if(c.moveToFirst()){
             do{
