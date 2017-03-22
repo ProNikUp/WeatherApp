@@ -22,7 +22,8 @@ public class History extends AppCompatActivity{
         int i = 0;
         if(c.moveToFirst()){
             do{
-                cityName[i] = c.getString(c.getColumnIndex("name"));
+                cityName[i] = c.getString(c.getColumnIndex("name")).substring(0,1).toUpperCase() +
+                        c.getString(c.getColumnIndex("name")).substring(1,c.getString(c.getColumnIndex("name")).length());
                 i++;
             }while (c.moveToNext());
         }else

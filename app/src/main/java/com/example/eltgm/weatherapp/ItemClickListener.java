@@ -15,7 +15,7 @@ public class ItemClickListener implements View.OnClickListener {
     public ItemClickListener(Context mContext, int dayNum, String cityName) {
         this.mContext = mContext;
         this.dayNum = dayNum;
-        this.cityName = cityName;
+        this.cityName = cityName.toLowerCase();
     }
 
     @Override

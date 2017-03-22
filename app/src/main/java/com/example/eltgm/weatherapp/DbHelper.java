@@ -78,7 +78,9 @@ public class DbHelper extends SQLiteOpenHelper {
                     pres1Json = pres.getString(pres.getColumnIndex("pres" + day));
                     wind1Json = wind.getString(wind.getColumnIndex("wind" + day));
                     descr1Json = descr.getString(descr.getColumnIndex("descr" + day));
-                    return new WeatherDay(temp1Json, hum1Json, wind1Json, pres1Json, descr1Json, String.valueOf(c.getString(c.getColumnIndex("name"))));
+                    String retCityName = c.getString(c.getColumnIndex("name"));
+                    retCityName = retCityName.substring(0,1).toUpperCase() + retCityName.substring(1, retCityName.length());
+                    return new WeatherDay(temp1Json, hum1Json, wind1Json, pres1Json, descr1Json, retCityName);
                 }
             }
         } else

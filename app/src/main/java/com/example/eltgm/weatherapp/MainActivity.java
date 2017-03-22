@@ -94,8 +94,8 @@ public class MainActivity extends AppCompatActivity {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                WeatherDay[] days = dbHelper.getCityWeathers(cityName,dbHelper);
-                dayTempSet(dbHelper.getCityWeather(cityName,dbHelper,-1));
+                WeatherDay[] days = dbHelper.getCityWeathers(cityName.toLowerCase(),dbHelper);
+                dayTempSet(dbHelper.getCityWeather(cityName.toLowerCase(),dbHelper,-1));
 
                 final RecyclerView rvMain = (RecyclerView) findViewById(R.id.rvMain);
                 final WeatherAdapter adapter = new WeatherAdapter(MainActivity.this, days);
@@ -123,7 +123,7 @@ public class MainActivity extends AppCompatActivity {
             int idColIndex = c.getColumnIndex("city_id");
 
                 do {
-                    if(c.getString(nameColIndex).equals(cityString))
+                    if(c.getString(nameColIndex).toLowerCase().equals(cityString.toLowerCase()))
                     {
                         hasCity = true;
                         cityId = c.getInt(idColIndex);
@@ -147,7 +147,7 @@ public class MainActivity extends AppCompatActivity {
             JSONObject descrObj = new JSONObject();
 
             ContentValues cityCv = new ContentValues();
-            cityCv.put("name", cityString);
+            cityCv.put("name", cityString.toLowerCase());
             cityCv.put("city_id",cityId);
             db.insert("cities", null, cityCv);
 
@@ -385,7 +385,10 @@ public class MainActivity extends AppCompatActivity {
             tvDayTemp.setText(String.valueOf((days.getDay())[timeZone].getTemp()));
             tvOsadki.setText((days.getDay())[timeZone].getDescription());
             tvWind.setText("wind speed: " + days.getDay()[timeZone].getWindSpeed() + "m/s");
-            tvCityName.setText((days.getDay())[timeZone].getCityName());
+            String retCityName = (days.getDay())[timeZone].getCityName().substring(0,1).toUpperCase() +
+                    (days.getDay())[timeZone].getCityName().substring(1,(days.getDay())[timeZone].getCityName().length());
+            tvCityName.setText(retCityName);
+
             Context context = getApplicationContext();
 
             Intent notificationIntent = new Intent(context, MainActivity.class);
@@ -397,7 +400,7 @@ public class MainActivity extends AppCompatActivity {
 
             builder.setContentIntent(contentIntent)
                     .setSmallIcon(android.R.drawable.ic_media_next)
-                    .setContentTitle((days.getDay())[timeZone].getCityName())
+                    .setContentTitle(retCityName)
                     .setContentText(String.valueOf((days.getDay())[timeZone].getTemp())); // Текст уведомления
 
             // Notification notification = builder.getNotification(); // до API 16

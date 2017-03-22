@@ -25,10 +25,10 @@ public class Launcher extends AppCompatActivity {
     //"http://api.openweathermap.org/data/2.5/forecast?q=Moscow&appid=295f7bee433d8cf26fd64d9ab085726b"
     public void enterWeather(View view) {
         Intent intent = new Intent(Launcher.this,MainActivity.class);
-        String url = "http://api.openweathermap.org/data/2.5/forecast?q=" + editText.getText()
+        String url = "http://api.openweathermap.org/data/2.5/forecast?q=" + editText.getText().toString().toLowerCase()
                 + "&appid=295f7bee433d8cf26fd64d9ab085726b";
         intent.putExtra("url", url);
-        intent.putExtra("cityName", editText.getText().toString());
+        intent.putExtra("cityName", editText.getText().toString().toLowerCase());
         startActivity(intent);
     } //входим в приложение с вводом города вручную
 /*
